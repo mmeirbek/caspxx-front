@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MapRouteImport } from './routes/map'
+import { Route as PredictionsRouteImport } from './routes/predictions'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as AlertsIndexRouteImport } from './routes/alerts.index'
 import { Route as CarrierApplyRouteImport } from './routes/carrier.apply'
@@ -34,6 +35,11 @@ const LoginRoute = LoginRouteImport.update({
 const MapRoute = MapRouteImport.update({
   id: '/map',
   path: '/map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PredictionsRoute = PredictionsRouteImport.update({
+  id: '/predictions',
+  path: '/predictions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/map': typeof MapRoute
+  '/predictions': typeof PredictionsRoute
   '/register': typeof RegisterRoute
   '/carrier/apply': typeof CarrierApplyRoute
   '/devices/$deviceId': typeof DevicesDeviceIdRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/map': typeof MapRoute
+  '/predictions': typeof PredictionsRoute
   '/register': typeof RegisterRoute
   '/carrier/apply': typeof CarrierApplyRoute
   '/devices/$deviceId': typeof DevicesDeviceIdRoute
@@ -108,6 +116,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/map': typeof MapRoute
+  '/predictions': typeof PredictionsRoute
   '/register': typeof RegisterRoute
   '/carrier/apply': typeof CarrierApplyRoute
   '/devices/$deviceId': typeof DevicesDeviceIdRoute
@@ -123,6 +132,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/map'
+    | '/predictions'
     | '/register'
     | '/carrier/apply'
     | '/devices/$deviceId'
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/map'
+    | '/predictions'
     | '/register'
     | '/carrier/apply'
     | '/devices/$deviceId'
@@ -149,6 +160,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/map'
+    | '/predictions'
     | '/register'
     | '/carrier/apply'
     | '/devices/$deviceId'
@@ -163,6 +175,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
   MapRoute: typeof MapRoute
+  PredictionsRoute: typeof PredictionsRoute
   RegisterRoute: typeof RegisterRoute
   CarrierApplyRoute: typeof CarrierApplyRoute
   DevicesDeviceIdRoute: typeof DevicesDeviceIdRoute
@@ -194,6 +207,13 @@ declare module '@tanstack/react-router' {
       path: '/map'
       fullPath: '/map'
       preLoaderRoute: typeof MapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/predictions': {
+      id: '/predictions'
+      path: '/predictions'
+      fullPath: '/predictions'
+      preLoaderRoute: typeof PredictionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -259,6 +279,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   MapRoute: MapRoute,
+  PredictionsRoute: PredictionsRoute,
   RegisterRoute: RegisterRoute,
   CarrierApplyRoute: CarrierApplyRoute,
   DevicesDeviceIdRoute: DevicesDeviceIdRoute,

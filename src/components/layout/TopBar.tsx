@@ -64,6 +64,9 @@ export function TopBar() {
         <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
           <Link to="/alerts">{t("nav.alerts")}</Link>
         </Button>
+        <Button asChild variant="ghost" size="sm" className="hidden lg:inline-flex">
+          <Link to="/predictions">{t("nav.predictions")}</Link>
+        </Button>
       </nav>
 
       <div className="ml-auto flex items-center gap-1">

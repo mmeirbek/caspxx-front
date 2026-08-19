@@ -226,19 +226,15 @@ export interface RealtimeAlertEvent {
   createdAt: string;
 }
 
-export type PredictionModel = "ARIMA" | "SARIMA" | "PROPHET";
+export type PredictionRiskLevel = "low" | "medium" | "high";
 
 export interface LandPrediction {
-  routeId: string | null;
-  orderId: string | null;
-  etaMinutes: number;
-  confidence: number;
-  fuelEstimateLiters: number;
-  riskScore: number;
-  riskLevel: "LOW" | "MEDIUM" | "HIGH";
-  model: PredictionModel;
-  summary: string;
-  predictedAt: string;
+  orderId: string;
+  recommendation: string;
+  riskLevel: string;
+  bestDepartureTime: string;
+  expectedDelayMinutes: number;
+  shortExplanation: string;
 }
 
 export interface CargoTypeOption {
