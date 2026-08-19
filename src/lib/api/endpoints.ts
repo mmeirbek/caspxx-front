@@ -20,6 +20,12 @@ export const API_ENDPOINTS = {
     apply: "/carrier/apply",
     profile: "/carrier/profile",
   },
+  vehicles: {
+    list: "/vehicles",
+    create: "/vehicles",
+    update: (id: string) => `/vehicles/${id}`,
+    delete: (id: string) => `/vehicles/${id}`,
+  },
   routes: {
     calculate: "/routes/calculate",
   },

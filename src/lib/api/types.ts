@@ -84,18 +84,32 @@ export interface RouteResponse {
   geometry: RouteGeometry;
 }
 
-export type DeviceStatus = "ACTIVE" | "INACTIVE";
+export interface Vehicle {
+  id: string;
+  carrierId: string;
+  type: string;
+  brand: string;
+  model: string;
+  year: number;
+  plateNumber: string;
+  capacityTons: number;
+  cargoVolume: number;
+  vehicleImageUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type DeviceStatus = "ACTIVE" | "SUSPENDED" | "RETIRED";
 
 export interface Device {
   id: string;
   name: string;
-  serialNumber: string;
-  secret: string;
-  vehicleId: string | null;
   status: DeviceStatus;
+  vehicleId: string | null;
+  lastLat: number | null;
+  lastLng: number | null;
   lastSeenAt: string | null;
   createdAt: string;
-  updatedAt: string;
 }
 
 export interface DeviceWithSecret {
@@ -103,70 +117,113 @@ export interface DeviceWithSecret {
   secret: string;
 }
 
+export type TelemetryMetric = "TEMPERATURE" | "HUMIDITY" | "BATTERY" | "SPEED";
+export type RuleOperator = "GT" | "GTE" | "LT" | "LTE";
+export type AlertSeverity = "WARNING" | "CRITICAL";
+export type AlertStatus = "OPEN" | "ACKNOWLEDGED" | "RESOLVED";
+
 export interface TelemetryRecord {
   id: string;
   deviceId: string;
   vehicleId: string | null;
   orderId: string | null;
-  temperatureC: number | null;
-  humidityPct: number | null;
+  temperature: number | null;
+  humidity: number | null;
+  battery: number | null;
   speedKmh: number | null;
-  fuelLevelPct: number | null;
-  latitude: number;
-  longitude: number;
-  recordedAt: string;
+  lat: number;
+  lng: number;
+  eventTime: string;
+  createdAt: string;
 }
+
+export type TelemetryBucket = "1m" | "5m" | "15m" | "1h" | "6h" | "1d";
 
 export interface TelemetryAggregate {
-  min: number | null;
-  avg: number | null;
-  max: number | null;
-}
-
-export interface TelemetryBucket {
-  ts: string;
+  sum: number;
   count: number;
-  avgLat: number | null;
-  avgLng: number | null;
-  temperature: TelemetryAggregate | null;
-  humidity: TelemetryAggregate | null;
-  speed: TelemetryAggregate | null;
-  fuel: TelemetryAggregate | null;
+  min: number;
+  max: number;
 }
 
-export type AlertSeverity = "INFO" | "WARNING" | "CRITICAL";
-export type AlertStatus = "ACTIVE" | "ACKNOWLEDGED" | "RESOLVED";
+export interface TelemetryPoint {
+  time: string;
+  count: number;
+  lat: number | null;
+  lng: number | null;
+  temperature?: TelemetryAggregate | null;
+  humidity?: TelemetryAggregate | null;
+  battery?: TelemetryAggregate | null;
+  speed?: TelemetryAggregate | null;
+}
+
+export interface TelemetryHistory {
+  deviceId?: string;
+  vehicleId?: string;
+  orderId?: string;
+  bucket: TelemetryBucket;
+  points: TelemetryPoint[];
+}
 
 export interface Alert {
   id: string;
   deviceId: string;
   vehicleId: string | null;
   orderId: string | null;
-  ruleId: string;
+  ruleId: string | null;
+  metric: TelemetryMetric;
+  value: number;
   severity: AlertSeverity;
-  title: string;
   message: string;
   status: AlertStatus;
-  latitude: number | null;
-  longitude: number | null;
-  createdAt: string;
   acknowledgedAt: string | null;
-  resolvedAt: string | null;
+  acknowledgedBy: string | null;
+  createdAt: string;
 }
-
-export type AlertMetric = "TEMPERATURE" | "HUMIDITY" | "SPEED" | "FUEL";
-export type AlertOperator = "GT" | "LT" | "GTE" | "LTE" | "EQ";
 
 export interface AlertRule {
   id: string;
-  name: string;
-  metric: AlertMetric;
-  operator: AlertOperator;
+  deviceId: string | null;
+  metric: TelemetryMetric;
+  operator: RuleOperator;
   threshold: number;
   severity: AlertSeverity;
-  enabled: boolean;
+  isActive: boolean;
   createdAt: string;
-  updatedAt: string;
+}
+
+export interface RealtimeTelemetryEvent {
+  deviceId: string;
+  vehicleId: string | null;
+  orderId: string | null;
+  temperature?: number | null;
+  humidity?: number | null;
+  battery?: number | null;
+  speedKmh?: number | null;
+  lat: number;
+  lng: number;
+  eventTime: string;
+  createdAt: string;
+}
+
+export interface RealtimeStatusEvent {
+  deviceId: string;
+  vehicleId: string | null;
+  status?: "online" | "offline" | "booting";
+  battery?: number | null;
+  eventTime?: string;
+}
+
+export interface RealtimeAlertEvent {
+  id: string;
+  deviceId: string;
+  vehicleId: string | null;
+  orderId: string | null;
+  metric: string;
+  value: number;
+  severity: string;
+  message: string;
+  createdAt: string;
 }
 
 export type PredictionModel = "ARIMA" | "SARIMA" | "PROPHET";

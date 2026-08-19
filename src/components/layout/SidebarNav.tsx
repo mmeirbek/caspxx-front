@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth/auth-provider";
 import { cn } from "@/lib/utils";
 
-const NAV_ITEMS = ["/", "/orders", "/map"] as const;
+const NAV_ITEMS = ["/", "/orders", "/map", "/devices", "/alerts"] as const;
 
 export function SidebarNav() {
   const { t } = useTranslation();
@@ -17,6 +17,8 @@ export function SidebarNav() {
     "/": t("nav.dashboard"),
     "/orders": t("nav.orders"),
     "/map": t("nav.map"),
+    "/devices": t("nav.devices"),
+    "/alerts": t("nav.alerts"),
   };
 
   return (

@@ -13,7 +13,10 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as AlertsIndexRouteImport } from './routes/alerts.index'
 import { Route as CarrierApplyRouteImport } from './routes/carrier.apply'
+import { Route as DevicesIndexRouteImport } from './routes/devices.index'
+import { Route as DevicesDeviceIdRouteImport } from './routes/devices.$deviceId'
 import { Route as OrdersIndexRouteImport } from './routes/orders.index'
 import { Route as OrdersOrderIdRouteImport } from './routes/orders.$orderId'
 import { Route as OrdersNewRouteImport } from './routes/orders.new'
@@ -38,9 +41,24 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AlertsIndexRoute = AlertsIndexRouteImport.update({
+  id: '/alerts/',
+  path: '/alerts/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CarrierApplyRoute = CarrierApplyRouteImport.update({
   id: '/carrier/apply',
   path: '/carrier/apply',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevicesIndexRoute = DevicesIndexRouteImport.update({
+  id: '/devices/',
+  path: '/devices/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevicesDeviceIdRoute = DevicesDeviceIdRouteImport.update({
+  id: '/devices/$deviceId',
+  path: '/devices/$deviceId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrdersIndexRoute = OrdersIndexRouteImport.update({
@@ -65,8 +83,11 @@ export interface FileRoutesByFullPath {
   '/map': typeof MapRoute
   '/register': typeof RegisterRoute
   '/carrier/apply': typeof CarrierApplyRoute
+  '/devices/$deviceId': typeof DevicesDeviceIdRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
+  '/alerts/': typeof AlertsIndexRoute
+  '/devices/': typeof DevicesIndexRoute
   '/orders/': typeof OrdersIndexRoute
 }
 export interface FileRoutesByTo {
@@ -75,8 +96,11 @@ export interface FileRoutesByTo {
   '/map': typeof MapRoute
   '/register': typeof RegisterRoute
   '/carrier/apply': typeof CarrierApplyRoute
+  '/devices/$deviceId': typeof DevicesDeviceIdRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
+  '/alerts': typeof AlertsIndexRoute
+  '/devices': typeof DevicesIndexRoute
   '/orders': typeof OrdersIndexRoute
 }
 export interface FileRoutesById {
@@ -86,8 +110,11 @@ export interface FileRoutesById {
   '/map': typeof MapRoute
   '/register': typeof RegisterRoute
   '/carrier/apply': typeof CarrierApplyRoute
+  '/devices/$deviceId': typeof DevicesDeviceIdRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
+  '/alerts/': typeof AlertsIndexRoute
+  '/devices/': typeof DevicesIndexRoute
   '/orders/': typeof OrdersIndexRoute
 }
 export interface FileRouteTypes {
@@ -98,8 +125,11 @@ export interface FileRouteTypes {
     | '/map'
     | '/register'
     | '/carrier/apply'
+    | '/devices/$deviceId'
     | '/orders/$orderId'
     | '/orders/new'
+    | '/alerts/'
+    | '/devices/'
     | '/orders/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -108,8 +138,11 @@ export interface FileRouteTypes {
     | '/map'
     | '/register'
     | '/carrier/apply'
+    | '/devices/$deviceId'
     | '/orders/$orderId'
     | '/orders/new'
+    | '/alerts'
+    | '/devices'
     | '/orders'
   id:
     | '__root__'
@@ -118,8 +151,11 @@ export interface FileRouteTypes {
     | '/map'
     | '/register'
     | '/carrier/apply'
+    | '/devices/$deviceId'
     | '/orders/$orderId'
     | '/orders/new'
+    | '/alerts/'
+    | '/devices/'
     | '/orders/'
   fileRoutesById: FileRoutesById
 }
@@ -129,8 +165,11 @@ export interface RootRouteChildren {
   MapRoute: typeof MapRoute
   RegisterRoute: typeof RegisterRoute
   CarrierApplyRoute: typeof CarrierApplyRoute
+  DevicesDeviceIdRoute: typeof DevicesDeviceIdRoute
   OrdersOrderIdRoute: typeof OrdersOrderIdRoute
   OrdersNewRoute: typeof OrdersNewRoute
+  AlertsIndexRoute: typeof AlertsIndexRoute
+  DevicesIndexRoute: typeof DevicesIndexRoute
   OrdersIndexRoute: typeof OrdersIndexRoute
 }
 
@@ -164,11 +203,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/alerts/': {
+      id: '/alerts/'
+      path: '/alerts'
+      fullPath: '/alerts/'
+      preLoaderRoute: typeof AlertsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/carrier/apply': {
       id: '/carrier/apply'
       path: '/carrier/apply'
       fullPath: '/carrier/apply'
       preLoaderRoute: typeof CarrierApplyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/devices/': {
+      id: '/devices/'
+      path: '/devices'
+      fullPath: '/devices/'
+      preLoaderRoute: typeof DevicesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/devices/$deviceId': {
+      id: '/devices/$deviceId'
+      path: '/devices/$deviceId'
+      fullPath: '/devices/$deviceId'
+      preLoaderRoute: typeof DevicesDeviceIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/orders/': {
@@ -201,8 +261,11 @@ const rootRouteChildren: RootRouteChildren = {
   MapRoute: MapRoute,
   RegisterRoute: RegisterRoute,
   CarrierApplyRoute: CarrierApplyRoute,
+  DevicesDeviceIdRoute: DevicesDeviceIdRoute,
   OrdersOrderIdRoute: OrdersOrderIdRoute,
   OrdersNewRoute: OrdersNewRoute,
+  AlertsIndexRoute: AlertsIndexRoute,
+  DevicesIndexRoute: DevicesIndexRoute,
   OrdersIndexRoute: OrdersIndexRoute,
 }
 export const routeTree = rootRouteImport
