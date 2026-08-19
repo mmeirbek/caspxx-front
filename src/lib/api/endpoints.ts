@@ -62,8 +62,10 @@ export const API_ENDPOINTS = {
     userStatus: (id: string) => `/superadmin/users/${id}/status`,
     userPassword: (id: string) => `/superadmin/users/${id}/password`,
     carriers: "/superadmin/carriers",
+    carrierApproval: (id: string) => `/superadmin/carriers/${id}/approval`,
     vehicles: "/superadmin/vehicles",
     orders: "/superadmin/orders",
+    order: (id: string) => `/superadmin/orders/${id}`,
   },
   uploads: {
     avatar: "/uploads/avatar",

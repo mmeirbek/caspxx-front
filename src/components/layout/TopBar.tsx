@@ -67,6 +67,11 @@ export function TopBar() {
         <Button asChild variant="ghost" size="sm" className="hidden lg:inline-flex">
           <Link to="/predictions">{t("nav.predictions")}</Link>
         </Button>
+        {(user?.role === "SUPERADMIN" || user?.role === "ADMIN") && (
+          <Button asChild variant="ghost" size="sm" className="hidden lg:inline-flex">
+            <Link to="/admin">{t("nav.admin")}</Link>
+          </Button>
+        )}
       </nav>
 
       <div className="ml-auto flex items-center gap-1">

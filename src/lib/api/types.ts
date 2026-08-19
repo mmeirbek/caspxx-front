@@ -1,4 +1,4 @@
-export type UserRole = "CLIENT" | "CARRIER" | "SUPERADMIN";
+export type UserRole = "CLIENT" | "CARRIER" | "ADMIN" | "SUPERADMIN";
 
 export type UserStatus = "ACTIVE" | "SUSPENDED";
 

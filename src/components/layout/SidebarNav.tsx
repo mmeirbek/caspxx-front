@@ -46,6 +46,14 @@ export function SidebarNav() {
             {labels[path]}
           </Link>
         ))}
+        {(user?.role === "SUPERADMIN" || user?.role === "ADMIN") && (
+          <Link
+            to="/admin"
+            className="block rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition hover:bg-sidebar-accent hover:text-foreground"
+          >
+            {t("nav.admin")}
+          </Link>
+        )}
       </nav>
     </aside>
   );

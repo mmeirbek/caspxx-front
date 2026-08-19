@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -8,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { requireAuth } from "@/lib/auth/guards";
 import { getAccessToken } from "@/lib/auth/storage";
 import { createOrder } from "@/lib/api/orders";
+import { uploadCargoPhoto, uploadProductPhoto } from "@/lib/api/uploads";
 import { ApiError } from "@/lib/api/client";
 import { CARGO_TYPES } from "@/lib/utils/cargo";
 import { Button } from "@/components/ui/button";
@@ -53,9 +55,53 @@ const newOrderSchema = z.object({
 
 type NewOrderFormValues = z.infer<typeof newOrderSchema>;
 
+function PhotoUpload({
+  label,
+  files,
+  onUpload,
+  onClear,
+  multiple,
+}: {
+  label: string;
+  files: File[];
+  onUpload: (files: FileList | null) => void;
+  onClear: () => void;
+  multiple?: boolean;
+}) {
+  const { t } = useTranslation();
+  return (
+    <FormItem>
+      <FormLabel>{label}</FormLabel>
+      <div className="space-y-2">
+        <Input
+          type="file"
+          accept="image/*"
+          multiple={multiple}
+          onChange={(e) => onUpload(e.target.files)}
+        />
+        {files.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2">
+            {files.map((f, i) => (
+              <span key={`${f.name}-${i}`} className="rounded-md bg-muted px-2 py-1 text-xs">
+                {f.name}
+              </span>
+            ))}
+            <Button type="button" variant="ghost" size="sm" onClick={onClear}>
+              {t("common.clear")}
+            </Button>
+          </div>
+        )}
+      </div>
+    </FormItem>
+  );
+}
+
 function NewOrderPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [cargoFile, setCargoFile] = useState<File | null>(null);
+  const [productFiles, setProductFiles] = useState<File[]>([]);
+  const [uploading, setUploading] = useState(false);
 
   const form = useForm<NewOrderFormValues>({
     resolver: zodResolver(newOrderSchema),
@@ -78,6 +124,7 @@ function NewOrderPage() {
 
   async function onSubmit(values: NewOrderFormValues) {
     try {
+      setUploading(true);
       const { order } = await createOrder(getAccessToken() ?? "", {
         title: values.title,
         cargoType: values.cargoType,
@@ -93,11 +140,20 @@ function NewOrderPage() {
         destinationLng: values.destinationLng,
         comment: values.comment || undefined,
       });
+      const token = getAccessToken() ?? "";
+      if (cargoFile) {
+        await uploadCargoPhoto(token, order.id, cargoFile);
+      }
+      if (productFiles.length > 0) {
+        await Promise.all(productFiles.map((f) => uploadProductPhoto(token, order.id, f)));
+      }
       toast.success(t("orders.createSuccess"));
       await navigate({ to: "/orders/$orderId", params: { orderId: order.id } });
     } catch (err) {
       const message = err instanceof ApiError ? err.message : t("common.error");
       toast.error(message);
+    } finally {
+      setUploading(false);
     }
   }
 
@@ -339,6 +395,27 @@ function NewOrderPage() {
                 />
               </div>
 
+              <PhotoUpload
+                label={t("uploads.cargoPhoto")}
+                files={cargoFile ? [cargoFile] : []}
+                onUpload={(files) => {
+                  const file = files?.[0];
+                  if (file && !uploading) setCargoFile(file);
+                }}
+                onClear={() => setCargoFile(null)}
+              />
+
+              <PhotoUpload
+                label={t("uploads.productPhoto")}
+                files={productFiles}
+                multiple
+                onUpload={(files) => {
+                  if (!files || files.length === 0 || uploading) return;
+                  setProductFiles((prev) => [...prev, ...Array.from(files)]);
+                }}
+                onClear={() => setProductFiles([])}
+              />
+
               <FormField
                 control={form.control}
                 name="comment"
@@ -357,7 +434,7 @@ function NewOrderPage() {
                 <Button type="button" variant="outline" asChild>
                   <Link to="/orders">{t("common.cancel")}</Link>
                 </Button>
-                <Button type="submit" disabled={form.formState.isSubmitting}>
+                <Button type="submit" disabled={form.formState.isSubmitting || uploading}>
                   {t("orders.create")}
                 </Button>
               </div>
