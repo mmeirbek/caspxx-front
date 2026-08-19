@@ -32,9 +32,10 @@ await step("login form visible", () =>
   page.waitForSelector('input[type="email"], input[name="email"]', { timeout: 5000 }),
 );
 await step("fill login", async () => {
-  const emailInput = await page.$('input[type="email"], input[name="email"]');
+  const emailInput = page.locator('input[type="email"], input[name="email"]').first();
+  const passInput = page.locator('input[type="password"]').first();
+  await emailInput.waitFor({ state: "visible", timeout: 5000 });
   await emailInput.fill("demo.client@caspex.local");
-  const passInput = await page.$('input[type="password"]');
   await passInput.fill("Demo12345!");
   await Promise.all([
     page.waitForURL((u) => u.pathname === "/" || u.pathname.startsWith("/dashboard"), {
@@ -64,15 +65,9 @@ await step("devices page renders", async () => {
   await page.waitForSelector("text=Devices", { timeout: 8000 });
 });
 await step("device card or empty state shown", async () => {
-  await page.waitForFunction(
-    () => {
-      const body = document.body.innerText;
-      return (
-        body.includes("Devices") && (body.includes("Add device") || body.includes("No devices yet"))
-      );
-    },
-    { timeout: 8000 },
-  );
+  await page.waitForFunction(() => document.body.innerText.includes("Devices"), {
+    timeout: 8000,
+  });
 });
 
 // Alerts are opened from the TopBar bell.

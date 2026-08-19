@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link } from "@tanstack/react-router";
@@ -35,6 +35,7 @@ function LoginPage() {
   const { t } = useTranslation();
   const { login } = useAuth();
   const navigate = useNavigate();
+  const router = useRouter();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -44,6 +45,7 @@ function LoginPage() {
   async function onSubmit(values: LoginFormValues) {
     try {
       await login(values.email, values.password);
+      await router.invalidate();
       await navigate({ to: "/" });
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) {
