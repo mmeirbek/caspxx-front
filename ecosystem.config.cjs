@@ -1,10 +1,9 @@
 module.exports = {
   apps: [
     {
-      name: "jol-map-frontend",
+      name: "caspxx-front",
       script: "npx",
       args: "vite preview --port 5173 --host",
-      cwd: "/home/aibek/projects/RRAI/jol-map",
       env: { NODE_ENV: "production" },
       autorestart: true,
       watch: false,

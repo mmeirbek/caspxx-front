@@ -9,26 +9,26 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Jol" },
+      { title: "CaspX" },
       {
         name: "description",
         content:
-          "Полноэкранная карта риска Астаны с подтверждёнными событиями, AI-прогнозами и статистикой в реальном времени.",
+          "Платформа грузоперевозок Мангистауской области: создание заказов, поиск перевозчиков, онлайн-маршруты и мониторинг грузов.",
       },
       { name: "theme-color", content: "#1d4ed8" },
-      { property: "og:title", content: "Jol" },
+      { property: "og:title", content: "CaspX" },
       {
         property: "og:description",
         content:
-          "Полноэкранная карта риска Астаны с подтверждёнными событиями, AI-прогнозами и статистикой в реальном времени.",
+          "Платформа грузоперевозок Мангистауской области: заказы, перевозчики, маршруты и мониторинг грузов.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Jol" },
+      { name: "twitter:title", content: "CaspX" },
       {
         name: "twitter:description",
         content:
-          "Полноэкранная карта риска Астаны с подтверждёнными событиями, AI-прогнозами и статистикой в реальном времени.",
+          "Платформа грузоперевозок Мангистауской области: заказы, перевозчики, маршруты и мониторинг грузов.",
       },
     ],
     links: [

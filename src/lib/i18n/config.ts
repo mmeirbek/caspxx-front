@@ -36,7 +36,7 @@ export function initI18n(): typeof i18n {
       detection: {
         order: ["localStorage", "navigator"],
         caches: ["localStorage"],
-        lookupLocalStorage: "jol.lang",
+        lookupLocalStorage: "caspxx.lang",
       },
       returnNull: false,
     });

@@ -1,9 +1,6 @@
 type LocalizedEntry = Record<string, string>;
 
-export function getLocalizedText(
-  entry: string | LocalizedEntry,
-  lang: string,
-): string {
+export function getLocalizedText(entry: string | LocalizedEntry, lang: string): string {
   if (typeof entry === "string") {
     try {
       const parsed: LocalizedEntry = JSON.parse(entry);

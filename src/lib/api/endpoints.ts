@@ -1,56 +1,63 @@
-// Central registry of API paths. Keeps every endpoint in one auditable place.
-
-export const endpoints = {
-  moduleAccess: {
-    unlock: "/module-access/unlock",
-    status: "/module-access/status",
-    lock: "/module-access/lock",
+export const API_ENDPOINTS = {
+  auth: {
+    login: "/auth/login",
+    register: "/auth/register",
+    refresh: "/auth/refresh",
+    logout: "/auth/logout",
+    me: "/auth/me",
   },
-  roads: "/roads",
-  app: {
-    dashboard: "/app/dashboard",
-    map: "/app/map",
-    road: (id: string) => `/app/roads/${id}`,
-    analytics: "/app/analytics",
+  orders: {
+    mine: "/orders/mine",
+    available: "/orders/available",
+    create: "/orders",
+    detail: (id: string) => `/orders/${id}`,
+    update: (id: string) => `/orders/${id}`,
+    updateStatus: (id: string) => `/orders/${id}/status`,
+    assign: (id: string) => `/orders/${id}/assign`,
+    delete: (id: string) => `/orders/${id}`,
+  },
+  routes: {
+    calculate: "/routes/calculate",
+  },
+  devices: {
+    list: "/devices",
+    create: "/devices",
+    attachVehicle: (id: string) => `/devices/${id}/vehicle`,
+    rotateSecret: (id: string) => `/devices/${id}/rotate-secret`,
+    delete: (id: string) => `/devices/${id}`,
+  },
+  telemetry: {
+    deviceLast: (id: string) => `/telemetry/devices/${id}/last`,
+    deviceHistory: (id: string) => `/telemetry/devices/${id}/history`,
+    vehicleLast: (id: string) => `/telemetry/vehicles/${id}/last`,
+    vehicleHistory: (id: string) => `/telemetry/vehicles/${id}/history`,
+    orderLive: (id: string) => `/telemetry/orders/${id}/live`,
+    orderHistory: (id: string) => `/telemetry/orders/${id}/history`,
+  },
+  alerts: {
+    rules: "/alerts/rules",
+    updateRule: (id: string) => `/alerts/rules/${id}`,
+    deleteRule: (id: string) => `/alerts/rules/${id}`,
+    list: "/alerts",
+    acknowledge: (id: string) => `/alerts/${id}/acknowledge`,
+    resolve: (id: string) => `/alerts/${id}/resolve`,
   },
   predictions: {
-    list: "/risk-predictions",
-    detail: (id: string) => `/risk-predictions/${id}`,
-    explanation: (id: string) => `/risk-predictions/${id}/explanation`,
+    land: "/predictions/land",
   },
-  hotspots: {
-    list: "/hotspots",
-    detect: "/hotspots/detect",
+  superadmin: {
+    users: "/superadmin/users",
+    user: (id: string) => `/superadmin/users/${id}`,
+    userRole: (id: string) => `/superadmin/users/${id}/role`,
+    userStatus: (id: string) => `/superadmin/users/${id}/status`,
+    userPassword: (id: string) => `/superadmin/users/${id}/password`,
+    carriers: "/superadmin/carriers",
+    vehicles: "/superadmin/vehicles",
+    orders: "/superadmin/orders",
   },
-  liveEvents: {
-    list: "/live-confirmed-events",
-  },
-  submissions: {
-    files: "/submission-files",
-    create: "/submissions",
-    status: (id: string) => `/submissions/${id}/status`,
-  },
-  moderation: {
-    list: "/moderation/submissions",
-    approve: (id: string) => `/moderation/submissions/${id}/approve`,
-    reject: (id: string) => `/moderation/submissions/${id}/reject`,
-  },
-  training: {
-    runs: "/model-training-runs",
-    run: (id: string) => `/model-training-runs/${id}`,
-  },
-  models: {
-    list: "/model-versions",
-  },
-  reports: {
-    list: "/reports",
-    download: (id: string) => `/reports/${id}/download`,
-  },
-  audit: "/audit-events",
-  risks: {
-    alerts: "/risk-alerts",
-  },
-  police: {
-    plan: "/police/plan",
+  uploads: {
+    avatar: "/uploads/avatar",
+    cargo: "/uploads/cargo",
+    product: "/uploads/product",
   },
 } as const;

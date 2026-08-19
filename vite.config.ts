@@ -6,16 +6,14 @@ import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
   server: {
-    proxy: {
-      "/api": {
-        target: "https://rrai-backend-production.apexcloudr3.workers.dev",
-        changeOrigin: true,
-      },
-    },
+    port: 5173,
+    strictPort: true,
     allowedHosts: true,
   },
   resolve: {
-    tsconfigPaths: true,
+    alias: {
+      "@": new URL("./src", import.meta.url).pathname,
+    },
   },
   plugins: [
     react(),
@@ -24,10 +22,10 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "favicon.svg"],
       manifest: {
-        name: "Jol — карта риска Астаны",
-        short_name: "Jol",
+        name: "CaspX — морские и сухопутные перевозки",
+        short_name: "CaspX",
         description:
-          "Полноэкранная карта риска Астаны с подтверждёнными событиями, AI-прогнозами и статистикой в реальном времени.",
+          "Платформа грузоперевозок Мангистауской области: создание заказов, поиск перевозчиков, онлайн-маршруты и мониторинг грузов.",
         theme_color: "#1d4ed8",
         background_color: "#ffffff",
         display: "standalone",

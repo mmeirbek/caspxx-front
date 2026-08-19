@@ -1,4 +1,3 @@
-import * as Sentry from "@sentry/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterContextProvider, RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
@@ -12,16 +11,6 @@ import { getRouter } from "./router";
 import "./styles.css";
 
 initI18n();
-
-Sentry.init({
-  dsn: import.meta.env.VITE_SENTRY_DSN,
-  environment: import.meta.env.MODE,
-  enabled: import.meta.env.PROD,
-  integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
-  tracesSampleRate: 0.1,
-  replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1.0,
-});
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,7 +30,13 @@ const queryClient = new QueryClient({
 
 const router = getRouter();
 
-function AppFallback({ error, resetErrorBoundary }: { error: unknown; resetErrorBoundary: () => void }) {
+function AppFallback({
+  error,
+  resetErrorBoundary,
+}: {
+  error: unknown;
+  resetErrorBoundary: () => void;
+}) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
@@ -70,26 +65,20 @@ function AppFallback({ error, resetErrorBoundary }: { error: unknown; resetError
   );
 }
 
-function SentryFallback({ error, resetError }: { error: unknown; resetError: () => void }) {
-  return <AppFallback error={error instanceof Error ? error : new Error(String(error))} resetErrorBoundary={resetError} />;
-}
-
 function App() {
   return (
-    <Sentry.ErrorBoundary fallback={SentryFallback}>
-      <ErrorBoundary FallbackComponent={AppFallback} onError={(error) => Sentry.captureException(error)}>
-        <I18nextProvider i18n={i18n}>
-          <QueryClientProvider client={queryClient}>
-            <RouterContextProvider router={router}>
-              <AppShell>
-                <RouterProvider router={router} />
-              </AppShell>
-            </RouterContextProvider>
-            <Toaster richColors position="top-right" />
-          </QueryClientProvider>
-        </I18nextProvider>
-      </ErrorBoundary>
-    </Sentry.ErrorBoundary>
+    <ErrorBoundary FallbackComponent={AppFallback}>
+      <I18nextProvider i18n={i18n}>
+        <QueryClientProvider client={queryClient}>
+          <RouterContextProvider router={router}>
+            <AppShell>
+              <RouterProvider router={router} />
+            </AppShell>
+          </RouterContextProvider>
+          <Toaster richColors position="top-right" />
+        </QueryClientProvider>
+      </I18nextProvider>
+    </ErrorBoundary>
   );
 }
 
