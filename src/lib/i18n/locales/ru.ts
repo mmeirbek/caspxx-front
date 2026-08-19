@@ -1,6 +1,6 @@
 export const ru = {
   brand: {
-    name: "CaspX",
+    name: "Jetkiz",
     tagline: "Платформа грузоперевозок",
   },
   app: {
@@ -300,6 +300,57 @@ export const ru = {
     pendingApproval: "Ваш профиль перевозчика на проверке.",
     noProfile: "Заполните профиль перевозчика, чтобы брать заказы.",
     goToApply: "Заполнить профиль",
+  },
+  jetkiz: {
+    updated: "Обновлено",
+    openPanel: "Открыть панель",
+    closePanel: "Закрыть панель",
+    kpi: {
+      activeOrders: "Активные заказы",
+      totalOrders: "Всего заказов",
+      awaitingCarrier: "Ожидают перевозчика",
+      inTransit: "В пути",
+      delivered: "Доставлено",
+      thisWeek: "За неделю",
+      myActive: "Мои активные",
+      myTotal: "Всего моих",
+      available: "Доступно сейчас",
+      freeSpace: "Свободное место",
+      freeSpaceValue: "{{pct}}%",
+    },
+    sensors: {
+      title: "Данные датчиков",
+      empty: "Нет данных с датчиков.",
+      temperature: "Температура",
+      humidity: "Влажность",
+    },
+    compatible: {
+      title: "Заказы по пути",
+      empty: "Нет подходящих заказов.",
+      take: "Взять",
+      fits: "Вместимость: {{weight}} т · {{volume}} м³",
+      free: "Свободно: {{weight}} т · {{volume}} м³",
+    },
+    camera: {
+      title: "Live камера",
+      empty: "Камеры не подключены.",
+      offline: "Камера офлайн",
+    },
+    predictions: {
+      title: "Прогнозы",
+      empty: "Прогнозы появятся после анализа активных заказов.",
+      error: "Не удалось получить прогноз.",
+      generated: "Сгенерировано",
+    },
+    recentOrders: "Последние заказы",
+    accept: {
+      title: "Новый заказ",
+      accept: "Принять заказ",
+      swipe: "Свайпните, чтобы принять",
+      swipeSuccess: "Заказ принят",
+      newOrders: "Новых заказов: {{count}}",
+      route: "Маршрут",
+    },
   },
 };
 export type Translations = typeof ru;

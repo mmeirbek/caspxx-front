@@ -18,6 +18,7 @@ import { LoadingState } from "@/components/shared/LoadingState";
 import { ErrorState } from "@/components/shared/ErrorState";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { JetkizHome } from "@/components/jetkiz/JetkizHome";
 
 export const Route = createFileRoute("/")({
   beforeLoad: ({ context }) => requireAuth(context),
@@ -263,5 +264,8 @@ function AdminDashboard() {
 
 function HomePage() {
   const { user } = useAuth();
-  return user?.role === "SUPERADMIN" ? <AdminDashboard /> : <ClientDashboard />;
+  if (user?.role === "SUPERADMIN" || user?.role === "ADMIN") {
+    return <AdminDashboard />;
+  }
+  return <JetkizHome />;
 }

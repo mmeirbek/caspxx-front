@@ -12,10 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as MapRouteImport } from './routes/map'
 import { Route as PredictionsRouteImport } from './routes/predictions'
 import { Route as RegisterRouteImport } from './routes/register'
-import { Route as AlertsIndexRouteImport } from './routes/alerts.index'
 import { Route as CarrierApplyRouteImport } from './routes/carrier.apply'
 import { Route as DevicesIndexRouteImport } from './routes/devices.index'
 import { Route as DevicesDeviceIdRouteImport } from './routes/devices.$deviceId'
@@ -38,11 +36,6 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MapRoute = MapRouteImport.update({
-  id: '/map',
-  path: '/map',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PredictionsRoute = PredictionsRouteImport.update({
   id: '/predictions',
   path: '/predictions',
@@ -51,11 +44,6 @@ const PredictionsRoute = PredictionsRouteImport.update({
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AlertsIndexRoute = AlertsIndexRouteImport.update({
-  id: '/alerts/',
-  path: '/alerts/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CarrierApplyRoute = CarrierApplyRouteImport.update({
@@ -93,14 +81,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
-  '/map': typeof MapRoute
   '/predictions': typeof PredictionsRoute
   '/register': typeof RegisterRoute
   '/carrier/apply': typeof CarrierApplyRoute
   '/devices/$deviceId': typeof DevicesDeviceIdRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
-  '/alerts/': typeof AlertsIndexRoute
   '/devices/': typeof DevicesIndexRoute
   '/orders/': typeof OrdersIndexRoute
 }
@@ -108,14 +94,12 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
-  '/map': typeof MapRoute
   '/predictions': typeof PredictionsRoute
   '/register': typeof RegisterRoute
   '/carrier/apply': typeof CarrierApplyRoute
   '/devices/$deviceId': typeof DevicesDeviceIdRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
-  '/alerts': typeof AlertsIndexRoute
   '/devices': typeof DevicesIndexRoute
   '/orders': typeof OrdersIndexRoute
 }
@@ -124,14 +108,12 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
-  '/map': typeof MapRoute
   '/predictions': typeof PredictionsRoute
   '/register': typeof RegisterRoute
   '/carrier/apply': typeof CarrierApplyRoute
   '/devices/$deviceId': typeof DevicesDeviceIdRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
-  '/alerts/': typeof AlertsIndexRoute
   '/devices/': typeof DevicesIndexRoute
   '/orders/': typeof OrdersIndexRoute
 }
@@ -141,14 +123,12 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
-    | '/map'
     | '/predictions'
     | '/register'
     | '/carrier/apply'
     | '/devices/$deviceId'
     | '/orders/$orderId'
     | '/orders/new'
-    | '/alerts/'
     | '/devices/'
     | '/orders/'
   fileRoutesByTo: FileRoutesByTo
@@ -156,14 +136,12 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
-    | '/map'
     | '/predictions'
     | '/register'
     | '/carrier/apply'
     | '/devices/$deviceId'
     | '/orders/$orderId'
     | '/orders/new'
-    | '/alerts'
     | '/devices'
     | '/orders'
   id:
@@ -171,14 +149,12 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
-    | '/map'
     | '/predictions'
     | '/register'
     | '/carrier/apply'
     | '/devices/$deviceId'
     | '/orders/$orderId'
     | '/orders/new'
-    | '/alerts/'
     | '/devices/'
     | '/orders/'
   fileRoutesById: FileRoutesById
@@ -187,14 +163,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   LoginRoute: typeof LoginRoute
-  MapRoute: typeof MapRoute
   PredictionsRoute: typeof PredictionsRoute
   RegisterRoute: typeof RegisterRoute
   CarrierApplyRoute: typeof CarrierApplyRoute
   DevicesDeviceIdRoute: typeof DevicesDeviceIdRoute
   OrdersOrderIdRoute: typeof OrdersOrderIdRoute
   OrdersNewRoute: typeof OrdersNewRoute
-  AlertsIndexRoute: typeof AlertsIndexRoute
   DevicesIndexRoute: typeof DevicesIndexRoute
   OrdersIndexRoute: typeof OrdersIndexRoute
 }
@@ -222,13 +196,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/map': {
-      id: '/map'
-      path: '/map'
-      fullPath: '/map'
-      preLoaderRoute: typeof MapRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/predictions': {
       id: '/predictions'
       path: '/predictions'
@@ -241,13 +208,6 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/alerts/': {
-      id: '/alerts/'
-      path: '/alerts'
-      fullPath: '/alerts/'
-      preLoaderRoute: typeof AlertsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/carrier/apply': {
@@ -299,14 +259,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   LoginRoute: LoginRoute,
-  MapRoute: MapRoute,
   PredictionsRoute: PredictionsRoute,
   RegisterRoute: RegisterRoute,
   CarrierApplyRoute: CarrierApplyRoute,
   DevicesDeviceIdRoute: DevicesDeviceIdRoute,
   OrdersOrderIdRoute: OrdersOrderIdRoute,
   OrdersNewRoute: OrdersNewRoute,
-  AlertsIndexRoute: AlertsIndexRoute,
   DevicesIndexRoute: DevicesIndexRoute,
   OrdersIndexRoute: OrdersIndexRoute,
 }

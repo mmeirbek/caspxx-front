@@ -226,6 +226,28 @@ export interface RealtimeAlertEvent {
   createdAt: string;
 }
 
+export type RealtimeOrderEvent = {
+  order: Order;
+};
+
+export type RealtimeCameraEvent = {
+  deviceId: string;
+  vehicleId: string | null;
+  orderId: string | null;
+  url: string;
+  capturedAt: string;
+};
+
+export interface CameraSnapshot {
+  id: string;
+  deviceId: string;
+  vehicleId: string | null;
+  orderId: string | null;
+  url: string;
+  capturedAt: string;
+  createdAt: string;
+}
+
 export type PredictionRiskLevel = "low" | "medium" | "high";
 
 export interface LandPrediction {

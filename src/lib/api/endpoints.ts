@@ -55,6 +55,10 @@ export const API_ENDPOINTS = {
   predictions: {
     land: "/predictions/land",
   },
+  cameras: {
+    orderLatest: (id: string) => `/cameras/orders/${id}/latest`,
+    deviceLatest: (id: string) => `/cameras/devices/${id}/latest`,
+  },
   superadmin: {
     users: "/superadmin/users",
     user: (id: string) => `/superadmin/users/${id}`,

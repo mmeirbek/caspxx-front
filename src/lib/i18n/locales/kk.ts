@@ -2,7 +2,7 @@ import type { Translations } from "./ru";
 
 export const kk: Translations = {
   brand: {
-    name: "CaspX",
+    name: "Jetkiz",
     tagline: "Жүк тасымалдау платформасы",
   },
   app: {
@@ -301,5 +301,56 @@ export const kk: Translations = {
     pendingApproval: "Тасымалдаушы профиліңіз тексерілуде.",
     noProfile: "Тапсырыс алу үшін тасымалдаушы профилін толтырыңыз.",
     goToApply: "Профильді толтыру",
+  },
+  jetkiz: {
+    updated: "Жаңартылды",
+    openPanel: "Панельді ашу",
+    closePanel: "Панельді жабу",
+    kpi: {
+      activeOrders: "Белсенді тапсырыстар",
+      totalOrders: "Барлық тапсырыстар",
+      awaitingCarrier: "Тасымалдаушы күтілуде",
+      inTransit: "Жолда",
+      delivered: "Жеткізілді",
+      thisWeek: "Аптада",
+      myActive: "Менің белсенді",
+      myTotal: "Барлығы менің",
+      available: "Қолжетімді",
+      freeSpace: "Бос орын",
+      freeSpaceValue: "{{pct}}%",
+    },
+    sensors: {
+      title: "Датчик деректері",
+      empty: "Датчик деректері жоқ.",
+      temperature: "Температура",
+      humidity: "Ылғалдылық",
+    },
+    compatible: {
+      title: "Жолдағы тапсырыстар",
+      empty: "Сәйкес тапсырыстар жоқ.",
+      take: "Алу",
+      fits: "Сыйымдылық: {{weight}} т · {{volume}} м³",
+      free: "Бос: {{weight}} т · {{volume}} м³",
+    },
+    camera: {
+      title: "Live камера",
+      empty: "Камералар қосылмаған.",
+      offline: "Камера офлайн",
+    },
+    predictions: {
+      title: "Болжамдар",
+      empty: "Белсенді тапсырыстар талдағаннан кейін болжамдар пайда болады.",
+      error: "Болжамды алу мүмкін болмады.",
+      generated: "Жасалды",
+    },
+    recentOrders: "Соңғы тапсырыстар",
+    accept: {
+      title: "Жаңа тапсырыс",
+      accept: "Тапсырысты қабылдау",
+      swipe: "Қабылдау үшін сырғытыңыз",
+      swipeSuccess: "Тапсырыс қабылданды",
+      newOrders: "Жаңа тапсырыстар: {{count}}",
+      route: "Бағыт",
+    },
   },
 };

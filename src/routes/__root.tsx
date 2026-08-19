@@ -1,8 +1,6 @@
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { TopBar } from "@/components/layout/TopBar";
-import { SidebarNav } from "@/components/layout/SidebarNav";
-import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import appCss from "../styles.css?url";
 import type { RouterContext } from "@/lib/auth/types";
 
@@ -11,14 +9,14 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "CaspX" },
+      { title: "Jetkiz" },
       {
         name: "description",
         content:
           "Платформа грузоперевозок Мангистауской области: создание заказов, поиск перевозчиков, онлайн-маршруты и мониторинг грузов.",
       },
       { name: "theme-color", content: "#1d4ed8" },
-      { property: "og:title", content: "CaspX" },
+      { property: "og:title", content: "Jetkiz" },
       {
         property: "og:description",
         content:
@@ -26,7 +24,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "CaspX" },
+      { name: "twitter:title", content: "Jetkiz" },
       {
         name: "twitter:description",
         content:
@@ -98,13 +96,9 @@ function RootComponent() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <TopBar />
-      <div className="flex min-w-0 flex-1">
-        <SidebarNav />
-        <main className="relative min-w-0 flex-1">
-          <Outlet />
-        </main>
-      </div>
-      <MobileBottomNav />
+      <main className="relative min-w-0 flex-1">
+        <Outlet />
+      </main>
     </div>
   );
 }

@@ -2,7 +2,7 @@ import type { Translations } from "./ru";
 
 export const en: Translations = {
   brand: {
-    name: "CaspX",
+    name: "Jetkiz",
     tagline: "Freight platform",
   },
   app: {
@@ -300,5 +300,56 @@ export const en: Translations = {
     pendingApproval: "Your carrier profile is under review.",
     noProfile: "Fill in your carrier profile to take orders.",
     goToApply: "Fill in profile",
+  },
+  jetkiz: {
+    updated: "Updated",
+    openPanel: "Open panel",
+    closePanel: "Close panel",
+    kpi: {
+      activeOrders: "Active orders",
+      totalOrders: "Total orders",
+      awaitingCarrier: "Awaiting carrier",
+      inTransit: "In transit",
+      delivered: "Delivered",
+      thisWeek: "This week",
+      myActive: "My active",
+      myTotal: "My total",
+      available: "Available now",
+      freeSpace: "Free space",
+      freeSpaceValue: "{{pct}}%",
+    },
+    sensors: {
+      title: "Sensor data",
+      empty: "No sensor data.",
+      temperature: "Temperature",
+      humidity: "Humidity",
+    },
+    compatible: {
+      title: "Orders en route",
+      empty: "No matching orders.",
+      take: "Take",
+      fits: "Capacity: {{weight}} t · {{volume}} m³",
+      free: "Free: {{weight}} t · {{volume}} m³",
+    },
+    camera: {
+      title: "Live camera",
+      empty: "No cameras connected.",
+      offline: "Camera offline",
+    },
+    predictions: {
+      title: "Predictions",
+      empty: "Predictions appear after analyzing active orders.",
+      error: "Could not get prediction.",
+      generated: "Generated",
+    },
+    recentOrders: "Recent orders",
+    accept: {
+      title: "New order",
+      accept: "Accept order",
+      swipe: "Swipe to accept",
+      swipeSuccess: "Order accepted",
+      newOrders: "New orders: {{count}}",
+      route: "Route",
+    },
   },
 };

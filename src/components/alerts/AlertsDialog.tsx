@@ -1,11 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Plus, Trash } from "@phosphor-icons/react";
 import { toast } from "sonner";
 
-import { requireAuth } from "@/lib/auth/guards";
 import { useAuth } from "@/lib/auth/auth-provider";
 import { getAccessToken } from "@/lib/auth/storage";
 import {
@@ -42,11 +40,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-
-export const Route = createFileRoute("/alerts/")({
-  beforeLoad: ({ context }) => requireAuth(context),
-  component: AlertsPage,
-});
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const METRICS: TelemetryMetric[] = ["TEMPERATURE", "HUMIDITY", "BATTERY", "SPEED"];
 const OPERATORS: RuleOperator[] = ["GT", "GTE", "LT", "LTE"];
@@ -341,43 +335,55 @@ function RulesTab() {
   );
 }
 
-function AlertsPage() {
+export function AlertsDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   const { t } = useTranslation();
   const { user } = useAuth();
   const canManageRules = user?.role === "SUPERADMIN" || user?.role === "CARRIER";
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">{t("alerts.title")}</h1>
-      </div>
-
-      <Tabs defaultValue="open">
-        <TabsList>
-          <TabsTrigger value="open">{t("alerts.status.OPEN")}</TabsTrigger>
-          <TabsTrigger value="acknowledged">{t("alerts.status.ACKNOWLEDGED")}</TabsTrigger>
-          <TabsTrigger value="resolved">{t("alerts.status.RESOLVED")}</TabsTrigger>
-          <TabsTrigger value="all">{t("common.all")}</TabsTrigger>
-          {canManageRules && <TabsTrigger value="rules">{t("alerts.rules")}</TabsTrigger>}
-        </TabsList>
-        <TabsContent value="open" className="mt-4">
-          <AlertsList status="OPEN" />
-        </TabsContent>
-        <TabsContent value="acknowledged" className="mt-4">
-          <AlertsList status="ACKNOWLEDGED" />
-        </TabsContent>
-        <TabsContent value="resolved" className="mt-4">
-          <AlertsList status="RESOLVED" />
-        </TabsContent>
-        <TabsContent value="all" className="mt-4">
-          <AlertsList />
-        </TabsContent>
-        {canManageRules && (
-          <TabsContent value="rules" className="mt-4">
-            <RulesTab />
-          </TabsContent>
-        )}
-      </Tabs>
-    </div>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>{t("alerts.title")}</DialogTitle>
+          <DialogDescription />
+        </DialogHeader>
+        <ScrollArea className="max-h-[70vh]">
+          <Tabs defaultValue="open">
+            <TabsList>
+              <TabsTrigger value="open">{t("alerts.status.OPEN")}</TabsTrigger>
+              <TabsTrigger value="acknowledged">{t("alerts.status.ACKNOWLEDGED")}</TabsTrigger>
+              <TabsTrigger value="resolved">{t("alerts.status.RESOLVED")}</TabsTrigger>
+              <TabsTrigger value="all">{t("common.all")}</TabsTrigger>
+              {canManageRules && <TabsTrigger value="rules">{t("alerts.rules")}</TabsTrigger>}
+            </TabsList>
+            <div className="mt-4">
+              <TabsContent value="open">
+                <AlertsList status="OPEN" />
+              </TabsContent>
+              <TabsContent value="acknowledged">
+                <AlertsList status="ACKNOWLEDGED" />
+              </TabsContent>
+              <TabsContent value="resolved">
+                <AlertsList status="RESOLVED" />
+              </TabsContent>
+              <TabsContent value="all">
+                <AlertsList />
+              </TabsContent>
+              {canManageRules && (
+                <TabsContent value="rules">
+                  <RulesTab />
+                </TabsContent>
+              )}
+            </div>
+          </Tabs>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
   );
 }

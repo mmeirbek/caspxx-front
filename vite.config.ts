@@ -22,8 +22,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "favicon.svg"],
       manifest: {
-        name: "CaspX — морские и сухопутные перевозки",
-        short_name: "CaspX",
+        name: "Jetkiz — морские и сухопутные перевозки",
+        short_name: "Jetkiz",
         description:
           "Платформа грузоперевозок Мангистауской области: создание заказов, поиск перевозчиков, онлайн-маршруты и мониторинг грузов.",
         theme_color: "#1d4ed8",

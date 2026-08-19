@@ -2,17 +2,22 @@ import { io, type Socket } from "socket.io-client";
 import { getAccessToken } from "@/lib/auth/storage";
 import type {
   RealtimeAlertEvent,
+  RealtimeCameraEvent,
+  RealtimeOrderEvent,
   RealtimeStatusEvent,
   RealtimeTelemetryEvent,
 } from "@/lib/api/types";
 
-export type RealtimeChannelType = "vehicle" | "order" | "device";
+export type RealtimeChannelType = "vehicle" | "order" | "device" | "orders";
 export type RealtimeSubscription = { type: RealtimeChannelType; id: string };
 
 export interface RealtimeHandlers {
   onTelemetry?: (event: RealtimeTelemetryEvent) => void;
   onStatus?: (event: RealtimeStatusEvent) => void;
   onAlert?: (event: RealtimeAlertEvent) => void;
+  onOrderAvailable?: (event: RealtimeOrderEvent) => void;
+  onOrderStatus?: (event: RealtimeOrderEvent) => void;
+  onCamera?: (event: RealtimeCameraEvent) => void;
   onDisconnect?: (reason: string) => void;
 }
 
@@ -39,6 +44,9 @@ function getSocket(): Socket | null {
   socket.on("telemetry", (event: RealtimeTelemetryEvent) => handlers?.onTelemetry?.(event));
   socket.on("status", (event: RealtimeStatusEvent) => handlers?.onStatus?.(event));
   socket.on("alert", (event: RealtimeAlertEvent) => handlers?.onAlert?.(event));
+  socket.on("order.available", (event: RealtimeOrderEvent) => handlers?.onOrderAvailable?.(event));
+  socket.on("order.status", (event: RealtimeOrderEvent) => handlers?.onOrderStatus?.(event));
+  socket.on("camera", (event: RealtimeCameraEvent) => handlers?.onCamera?.(event));
   socket.on("disconnect", (reason: string) => handlers?.onDisconnect?.(reason));
 
   return socket;

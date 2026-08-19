@@ -189,3 +189,35 @@
   font-size: 10px !important;
   background: color-mix(in oklab, var(--color-card) 85%, transparent) !important;
 }
+
+/* Jetkiz map markers */
+.jetkiz-ab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 9999px;
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 12px;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.3);
+}
+.jetkiz-ab[data-letter="B"] {
+  background: var(--color-risk-medium);
+  color: var(--color-risk-medium-foreground);
+}
+.jetkiz-truck {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 2px solid var(--color-primary);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.3);
+}
