@@ -7,7 +7,7 @@ export const API_ENDPOINTS = {
     me: "/auth/me",
   },
   orders: {
-    mine: "/orders/mine",
+    mine: "/orders/my",
     available: "/orders/available",
     create: "/orders",
     detail: (id: string) => `/orders/${id}`,
@@ -15,6 +15,10 @@ export const API_ENDPOINTS = {
     updateStatus: (id: string) => `/orders/${id}/status`,
     assign: (id: string) => `/orders/${id}/assign`,
     delete: (id: string) => `/orders/${id}`,
+  },
+  carrier: {
+    apply: "/carrier/apply",
+    profile: "/carrier/profile",
   },
   routes: {
     calculate: "/routes/calculate",

@@ -48,7 +48,17 @@ export function TopBar() {
         </div>
       </Link>
 
-      <nav className="flex min-w-0 flex-1 items-center gap-1" />
+      <nav className="flex min-w-0 flex-1 items-center gap-1">
+        <Button asChild variant="ghost" size="sm">
+          <Link to="/">{t("nav.dashboard")}</Link>
+        </Button>
+        <Button asChild variant="ghost" size="sm">
+          <Link to="/orders">{t("nav.orders")}</Link>
+        </Button>
+        <Button asChild variant="ghost" size="sm">
+          <Link to="/map">{t("nav.map")}</Link>
+        </Button>
+      </nav>
 
       <div className="ml-auto flex items-center gap-1">
         <LanguageSwitcher />

@@ -1,6 +1,7 @@
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { TopBar } from "@/components/layout/TopBar";
+import { SidebarNav } from "@/components/layout/SidebarNav";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import appCss from "../styles.css?url";
 import type { RouterContext } from "@/lib/auth/types";
@@ -97,9 +98,12 @@ function RootComponent() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <TopBar />
-      <main className="relative min-w-0 flex-1">
-        <Outlet />
-      </main>
+      <div className="flex min-w-0 flex-1">
+        <SidebarNav />
+        <main className="relative min-w-0 flex-1">
+          <Outlet />
+        </main>
+      </div>
       <MobileBottomNav />
     </div>
   );

@@ -2,8 +2,22 @@ import { Link } from "@tanstack/react-router";
 import { MapTrifold as RouteIcon } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 
+import { useAuth } from "@/lib/auth/auth-provider";
+import { cn } from "@/lib/utils";
+
+const NAV_ITEMS = ["/", "/orders", "/map"] as const;
+
 export function SidebarNav() {
   const { t } = useTranslation();
+  const { user, isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) return null;
+
+  const labels: Record<string, string> = {
+    "/": t("nav.dashboard"),
+    "/orders": t("nav.orders"),
+    "/map": t("nav.map"),
+  };
 
   return (
     <aside className="hidden w-56 shrink-0 border-r bg-sidebar md:flex md:flex-col">
@@ -17,7 +31,19 @@ export function SidebarNav() {
         </div>
       </Link>
 
-      <nav className="flex-1 space-y-1 px-3" />
+      <nav className="flex-1 space-y-1 px-3">
+        {NAV_ITEMS.map((path) => (
+          <Link
+            key={path}
+            to={path}
+            className={cn(
+              "block rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition hover:bg-sidebar-accent hover:text-foreground",
+            )}
+          >
+            {labels[path]}
+          </Link>
+        ))}
+      </nav>
     </aside>
   );
 }

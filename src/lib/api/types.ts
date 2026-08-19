@@ -33,10 +33,12 @@ export interface AuthTokensResponse {
 }
 
 export type OrderStatus =
-  | "CREATED"
+  | "NEW"
   | "SEARCHING"
   | "ASSIGNED"
+  | "PICKED_UP"
   | "IN_TRANSIT"
+  | "AT_CHECKPOINT"
   | "DELIVERED"
   | "CANCELLED";
 
