@@ -336,11 +336,16 @@ export function JetkizHome() {
     humidity: liveByOrder[o.id]?.humidity ?? null,
   }));
 
-  const cameraItems = activeOrders.map((o) => ({
-    orderId: o.id,
-    title: o.title,
-    url: cameraByOrder[o.id] ?? null,
-  }));
+  const cameraOrder = activeOrders.find((o) => cameraByOrder[o.id]) ?? activeOrders[0];
+  const cameraItems = cameraOrder
+    ? [
+        {
+          orderId: cameraOrder.id,
+          title: t("jetkiz.camera.baggageTitle"),
+          url: cameraByOrder[cameraOrder.id] ?? null,
+        },
+      ]
+    : [];
 
   const availableRows = available.map((o) => ({
     order: o,

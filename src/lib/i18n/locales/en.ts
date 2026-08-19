@@ -78,6 +78,7 @@ export const en: Translations = {
     available: "Available orders",
     create: "Create order",
     searchPlaceholder: "Search by title or route",
+    mangystauOnly: "All shipments operate within Mangystau Region.",
     empty: "No orders found.",
     details: "Order details",
     fields: {
@@ -333,6 +334,7 @@ export const en: Translations = {
     },
     camera: {
       title: "Live camera",
+      baggageTitle: "Carrier baggage camera",
       empty: "No cameras connected.",
       offline: "Camera offline",
     },

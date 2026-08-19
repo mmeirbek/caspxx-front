@@ -78,6 +78,7 @@ export const kk: Translations = {
     available: "Қолжетімді тапсырыстар",
     create: "Тапсырыс жасау",
     searchPlaceholder: "Атауы немесе бағыты бойынша іздеу",
+    mangystauOnly: "Барлық тасымал Маңғыстау облысы ішінде орындалады.",
     empty: "Тапсырыстар табылмады.",
     details: "Тапсырыс мәліметтері",
     fields: {
@@ -334,6 +335,7 @@ export const kk: Translations = {
     },
     camera: {
       title: "Live камера",
+      baggageTitle: "Тасымалдаушы багажының камерасы",
       empty: "Камералар қосылмаған.",
       offline: "Камера офлайн",
     },

@@ -76,6 +76,7 @@ export const ru = {
     available: "Доступные заказы",
     create: "Создать заказ",
     searchPlaceholder: "Поиск по названию или маршруту",
+    mangystauOnly: "Все перевозки выполняются внутри Мангистауской области.",
     empty: "Заказы не найдены.",
     details: "Детали заказа",
     fields: {
@@ -333,6 +334,7 @@ export const ru = {
     },
     camera: {
       title: "Live камера",
+      baggageTitle: "Камера багажа перевозчика",
       empty: "Камеры не подключены.",
       offline: "Камера офлайн",
     },

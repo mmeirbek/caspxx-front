@@ -240,6 +240,9 @@ function NewOrderPage() {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
+                <p className="text-sm text-muted-foreground sm:col-span-2">
+                  {t("orders.mangystauOnly")}
+                </p>
                 <div className="space-y-4">
                   <FormField
                     control={form.control}
