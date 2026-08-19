@@ -50,6 +50,7 @@ export const ru = {
     },
     noAccount: "Нет аккаунта?",
     hasAccount: "Уже есть аккаунт?",
+    registerSuccess: "Регистрация успешна. Войдите в аккаунт.",
     invalidCredentials: "Неверный email или пароль",
     sessionExpired: "Сессия истекла. Войдите снова.",
   },

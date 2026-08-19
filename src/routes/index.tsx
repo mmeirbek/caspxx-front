@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
+import { requireAuth } from "@/lib/auth/guards";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: ({ context }) => requireAuth(context),
   component: HomePage,
 });
 

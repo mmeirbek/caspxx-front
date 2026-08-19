@@ -11,10 +11,10 @@ export interface User {
   phone: string | null;
   avatarUrl: string | null;
   companyName: string | null;
-  companyLogoUrl: string | null;
+  companyLogo: string | null;
   city: string | null;
   country: string | null;
-  isEmailVerified: boolean;
+  isActive: boolean;
   lastLoginAt: string | null;
   createdAt: string;
   updatedAt: string;

@@ -52,6 +52,7 @@ export const kk: Translations = {
     },
     noAccount: "Аккаунт жоқ па?",
     hasAccount: "Аккаунтыңыз бар ма?",
+    registerSuccess: "Тіркелу сәтті өтті. Аккаунтқа кіріңіз.",
     invalidCredentials: "Email немесе құпия сөз қате",
     sessionExpired: "Сессия аяқталды. Қайта кіріңіз.",
   },

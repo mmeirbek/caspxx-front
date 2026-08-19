@@ -52,6 +52,7 @@ export const en: Translations = {
     },
     noAccount: "No account?",
     hasAccount: "Already have an account?",
+    registerSuccess: "Registration successful. Please sign in.",
     invalidCredentials: "Invalid email or password",
     sessionExpired: "Session expired. Please sign in again.",
   },

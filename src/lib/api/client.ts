@@ -31,6 +31,15 @@ export interface RequestOptions {
   headers?: Record<string, string>;
   signal?: AbortSignal;
   auth?: string | null; // Bearer token
+  retryOnUnauthorized?: boolean; // default true for authenticated requests
+}
+
+type RefreshHandler = () => Promise<string | null>;
+
+let refreshHandler: RefreshHandler | null = null;
+
+export function setRefreshHandler(handler: RefreshHandler | null): void {
+  refreshHandler = handler;
 }
 
 function buildUrl(path: string, query?: RequestOptions["query"]): string {
@@ -91,6 +100,17 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     : await response.text().catch(() => null);
 
   if (!response.ok) {
+    if (
+      response.status === 401 &&
+      auth &&
+      refreshHandler &&
+      options.retryOnUnauthorized !== false
+    ) {
+      const newToken = await refreshHandler();
+      if (newToken) {
+        return apiRequest<T>(path, { ...options, auth: newToken });
+      }
+    }
     const err = parsed as { message?: string; error?: string; statusCode?: number } | null;
     const code = err?.error ?? `HTTP_${response.status}`;
     const message = err?.message ?? `Request failed with ${response.status}`;
