@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AdminDashboardRouteImport } from './routes/admin-dashboard'
+import { Route as CarrierApprovalRouteImport } from './routes/carrier-approval'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PlanRouteImport } from './routes/plan'
 import { Route as PredictionsRouteImport } from './routes/predictions'
@@ -32,6 +34,16 @@ const IndexRoute = IndexRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/admin-dashboard',
+  path: '/admin-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CarrierApprovalRoute = CarrierApprovalRouteImport.update({
+  id: '/carrier-approval',
+  path: '/carrier-approval',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -98,6 +110,8 @@ const RouteConditionsOrderIdRoute = RouteConditionsOrderIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/admin-dashboard': typeof AdminDashboardRoute
+  '/carrier-approval': typeof CarrierApprovalRoute
   '/login': typeof LoginRoute
   '/plan': typeof PlanRoute
   '/predictions': typeof PredictionsRoute
@@ -114,6 +128,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/admin-dashboard': typeof AdminDashboardRoute
+  '/carrier-approval': typeof CarrierApprovalRoute
   '/login': typeof LoginRoute
   '/plan': typeof PlanRoute
   '/predictions': typeof PredictionsRoute
@@ -131,6 +147,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/admin-dashboard': typeof AdminDashboardRoute
+  '/carrier-approval': typeof CarrierApprovalRoute
   '/login': typeof LoginRoute
   '/plan': typeof PlanRoute
   '/predictions': typeof PredictionsRoute
@@ -149,6 +167,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/admin-dashboard'
+    | '/carrier-approval'
     | '/login'
     | '/plan'
     | '/predictions'
@@ -165,6 +185,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/admin-dashboard'
+    | '/carrier-approval'
     | '/login'
     | '/plan'
     | '/predictions'
@@ -181,6 +203,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/admin-dashboard'
+    | '/carrier-approval'
     | '/login'
     | '/plan'
     | '/predictions'
@@ -198,6 +222,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
+  AdminDashboardRoute: typeof AdminDashboardRoute
+  CarrierApprovalRoute: typeof CarrierApprovalRoute
   LoginRoute: typeof LoginRoute
   PlanRoute: typeof PlanRoute
   PredictionsRoute: typeof PredictionsRoute
@@ -226,6 +252,20 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin-dashboard': {
+      id: '/admin-dashboard'
+      path: '/admin-dashboard'
+      fullPath: '/admin-dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/carrier-approval': {
+      id: '/carrier-approval'
+      path: '/carrier-approval'
+      fullPath: '/carrier-approval'
+      preLoaderRoute: typeof CarrierApprovalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -318,6 +358,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
+  AdminDashboardRoute: AdminDashboardRoute,
+  CarrierApprovalRoute: CarrierApprovalRoute,
   LoginRoute: LoginRoute,
   PlanRoute: PlanRoute,
   PredictionsRoute: PredictionsRoute,

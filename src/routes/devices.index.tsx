@@ -267,11 +267,12 @@ function DevicesPage() {
   const isCarrier = user?.role === "CARRIER";
   const isSuperadmin = user?.role === "SUPERADMIN";
   const canManage = isCarrier || isSuperadmin;
+  const canView = canManage || user?.role === "CLIENT" || user?.role === "ADMIN";
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["devices"],
     queryFn: () => listDevices(getAccessToken() ?? ""),
-    enabled: canManage,
+    enabled: canView,
   });
 
   const { data: vehiclesData } = useQuery({
@@ -301,7 +302,7 @@ function DevicesPage() {
     onError: () => toast.error(t("common.error")),
   });
 
-  if (!canManage) {
+  if (!canView) {
     return (
       <div className="mx-auto max-w-5xl space-y-6 px-4 py-6">
         <h1 className="text-2xl font-semibold tracking-tight">{t("devices.title")}</h1>
@@ -317,10 +318,12 @@ function DevicesPage() {
           <h1 className="text-2xl font-semibold tracking-tight">{t("devices.title")}</h1>
           <p className="text-sm text-muted-foreground">{t("devices.subtitle")}</p>
         </div>
-        <Button onClick={() => setCreateOpen(true)}>
-          <Plus className="mr-1 h-4 w-4" />
-          {t("devices.create")}
-        </Button>
+        {canManage && (
+          <Button onClick={() => setCreateOpen(true)}>
+            <Plus className="mr-1 h-4 w-4" />
+            {t("devices.create")}
+          </Button>
+        )}
       </div>
 
       {isLoading && <LoadingState />}

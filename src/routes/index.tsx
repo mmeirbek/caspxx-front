@@ -263,9 +263,5 @@ function AdminDashboard() {
 }
 
 function HomePage() {
-  const { user } = useAuth();
-  if (user?.role === "SUPERADMIN" || user?.role === "ADMIN") {
-    return <AdminDashboard />;
-  }
   return <JetkizHome />;
 }

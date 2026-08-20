@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { CircleMarker, MapContainer, Popup, TileLayer, useMap } from "react-leaflet";
@@ -13,6 +13,8 @@ import { EmptyState } from "@/components/shared/EmptyState";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth/auth-provider";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/settlements")({
   component: SettlementsPage,
@@ -124,6 +126,7 @@ function SettlementCard({
 
 function SettlementsPage() {
   const { t, i18n } = useTranslation();
+  const { isAuthenticated } = useAuth();
   const lang = i18n.language;
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -131,7 +134,25 @@ function SettlementsPage() {
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["settlements"],
     queryFn: () => listSettlements(),
+    enabled: isAuthenticated,
   });
+
+  if (!isAuthenticated) {
+    return (
+      <div className="mx-auto flex w-full max-w-2xl items-center justify-center px-4 py-16 sm:px-6 lg:px-8">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>{t("auth.loginRequired")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Button asChild>
+              <Link to="/login">{t("auth.login")}</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   const settlements = useMemo(() => {
     const all = data?.settlements ?? [];

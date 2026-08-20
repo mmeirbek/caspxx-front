@@ -19,6 +19,8 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/auth/auth-provider";
 import { getAccessToken } from "@/lib/auth/storage";
 import { assignOrder, listAvailableOrders, listMineOrders } from "@/lib/api/orders";
+import { ApiError } from "@/lib/api/client";
+import { getCarrierProfile } from "@/lib/api/carrier";
 import { listVehicles } from "@/lib/api/vehicles";
 import { calculateRoute } from "@/lib/api/routes";
 import { liveTelemetryForOrder } from "@/lib/api/telemetry";
@@ -80,10 +82,40 @@ export function JetkizHome() {
     queryFn: () => listVehicles(token),
     enabled: isCarrier,
   });
+  const carrierProfileQ = useQuery({
+    queryKey: ["carrier", "profile"],
+    queryFn: () => getCarrierProfile(token),
+    enabled: isCarrier,
+    retry: 0,
+  });
+  const canTakeOrders = !isCarrier || carrierProfileQ.data?.carrierProfile.isApproved === true;
 
   const myOrders = useMemo(() => mine.data?.orders ?? [], [mine.data?.orders]);
-  const available = useMemo(() => availableQ.data?.orders ?? [], [availableQ.data?.orders]);
   const vehicles = vehiclesQ.data?.vehicles ?? [];
+  const carrierCapacity = useMemo(() => {
+    const vehicle = vehicles[0];
+    const loadedOrders = myOrders.filter((o) => ACTIVE_STATUSES.has(o.status));
+    const loadedWeight = loadedOrders.reduce((sum, o) => sum + o.weight, 0);
+    const loadedVolume = loadedOrders.reduce((sum, o) => sum + o.volume, 0);
+    const totalWeight = (vehicle?.capacityTons ?? 0) * 1000;
+    const totalVolume = vehicle?.cargoVolume ?? 0;
+
+    return {
+      freeWeight: Math.max(0, totalWeight - loadedWeight),
+      freeVolume: Math.max(0, totalVolume - loadedVolume),
+      totalWeight,
+      totalVolume,
+    };
+  }, [myOrders, vehicles]);
+  const available = useMemo(
+    () =>
+      (availableQ.data?.orders ?? []).filter(
+        (order) =>
+          order.weight <= carrierCapacity.freeWeight &&
+          order.volume <= carrierCapacity.freeVolume,
+      ),
+    [availableQ.data?.orders, carrierCapacity.freeWeight, carrierCapacity.freeVolume],
+  );
 
   const activeOrders = useMemo(
     () =>
@@ -213,7 +245,14 @@ export function JetkizHome() {
           setLiveByOrder((prev) => ({ ...prev, [ev.orderId!]: ev }));
         }
       },
-      onOrderAvailable: (ev) => enqueueRef.current(ev.order),
+      onOrderAvailable: (ev) => {
+        if (
+          ev.order.weight <= carrierCapacity.freeWeight &&
+          ev.order.volume <= carrierCapacity.freeVolume
+        ) {
+          enqueueRef.current(ev.order);
+        }
+      },
       onOrderStatus: (ev) => {
         queryClient.setQueryData<{ orders: Order[] }>(["orders", "mine"], (current) =>
           current
@@ -240,36 +279,55 @@ export function JetkizHome() {
         unsubscribeRealtime({ type: "orders", id: "available" });
       }
     };
-  }, [activeOrders, activeIds, isCarrier, queryClient, user]);
+  }, [
+    activeOrders,
+    activeIds,
+    carrierCapacity.freeVolume,
+    carrierCapacity.freeWeight,
+    isCarrier,
+    queryClient,
+    user,
+  ]);
 
   const acceptMutation = useMutation({
     mutationFn: (order: Order) => assignOrder(token, order.id),
-    onSuccess: (_data, order) => {
+    onSuccess: ({ order: assignedOrder }, order) => {
       setAcceptingId(null);
       toast.success(t("jetkiz.accept.swipeSuccess"));
       seenRef.current.add(order.id);
       setAcceptQueue((q) => q.filter((x) => x.id !== order.id));
+      queryClient.setQueryData<{ orders: Order[] }>(["orders", "mine"], (current) => ({
+        orders: current?.orders.some((item) => item.id === assignedOrder.id)
+          ? current.orders.map((item) => (item.id === assignedOrder.id ? assignedOrder : item))
+          : [assignedOrder, ...(current?.orders ?? [])],
+      }));
+      queryClient.setQueryData<{ orders: Order[] }>(["orders", "available"], (current) =>
+        current
+          ? { orders: current.orders.filter((item) => item.id !== assignedOrder.id) }
+          : current,
+      );
       subscribeRealtime({ type: "order", id: order.id });
-      void queryClient.invalidateQueries({ queryKey: ["orders"] });
+      void queryClient.invalidateQueries({ queryKey: ["orders", "mine"] });
+      void queryClient.invalidateQueries({ queryKey: ["orders", "available"] });
       void queryClient.invalidateQueries({ queryKey: ["routes", "active"] });
       void queryClient.invalidateQueries({ queryKey: ["live", "active"] });
       void queryClient.invalidateQueries({ queryKey: ["cameras", "active"] });
     },
-    onError: () => {
+    onError: (error) => {
       setAcceptingId(null);
-      toast.error(t("common.error"));
+      toast.error(error instanceof ApiError ? error.message : t("common.error"));
     },
   });
 
   const loaded = myOrders.filter(
     (o) => ACTIVE_STATUSES.has(o.status) || o.status === "SEARCHING" || o.status === "NEW",
   );
-  const totalCapacity = vehicles.reduce((s, v) => s + v.capacityTons, 0);
-  const loadedWeight = loaded.reduce((s, o) => s + o.weight, 0);
-  const totalVolume = vehicles.reduce((s, v) => s + v.cargoVolume, 0);
-  const loadedVolume = loaded.reduce((s, o) => s + o.volume, 0);
-  const freeWeight = Math.max(0, totalCapacity - loadedWeight);
-  const freeVolume = Math.max(0, totalVolume - loadedVolume);
+  const totalCapacity = carrierCapacity.totalWeight;
+  const loadedWeight = totalCapacity - carrierCapacity.freeWeight;
+  const totalVolume = carrierCapacity.totalVolume;
+  const loadedVolume = totalVolume - carrierCapacity.freeVolume;
+  const freeWeight = carrierCapacity.freeWeight;
+  const freeVolume = carrierCapacity.freeVolume;
   const freeSpacePct =
     totalCapacity > 0 ? Math.round((freeWeight / totalCapacity) * 100) : undefined;
 
@@ -459,6 +517,7 @@ export function JetkizHome() {
           onTake={(o) => openAccept(o)}
           predictionOrders={myOrders}
           recentOrders={myOrders}
+          canTake={canTakeOrders}
           onClose={() => setSidebarOpen(false)}
         />
       </aside>

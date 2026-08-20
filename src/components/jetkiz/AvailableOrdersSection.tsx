@@ -18,12 +18,14 @@ export function AvailableOrdersSection({
   takePendingId,
   freeWeight,
   freeVolume,
+  canTake,
 }: {
   rows: AvailableOrderRow[];
   onTake: (order: Order) => void;
   takePendingId: string | null;
   freeWeight: number;
   freeVolume: number;
+  canTake: boolean;
 }) {
   const { t } = useTranslation();
   const sorted = [...rows].sort((a, b) => Number(b.compatible) - Number(a.compatible));
@@ -37,6 +39,11 @@ export function AvailableOrdersSection({
           volume: freeVolume.toFixed(0),
         })}
       </p>
+      {!canTake && (
+        <p className="rounded-md bg-amber-50 p-2 text-xs text-amber-800">
+          {t("carrier.pendingApproval")}
+        </p>
+      )}
       {sorted.length === 0 ? (
         <EmptyState title={t("jetkiz.compatible.empty")} />
       ) : (
@@ -70,7 +77,7 @@ export function AvailableOrdersSection({
                     "shrink-0",
                     compatible && "bg-accent text-accent-foreground hover:bg-accent/90",
                   )}
-                  disabled={takePendingId === order.id}
+                  disabled={!canTake || takePendingId === order.id}
                   onClick={() => onTake(order)}
                 >
                   {t("jetkiz.compatible.take")}

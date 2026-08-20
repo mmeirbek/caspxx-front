@@ -10,6 +10,8 @@ export interface RegisterPayload {
   lastName: string;
   phone: string;
   companyName?: string;
+  personalDataConsent: boolean;
+  privacyPolicyConsent: boolean;
 }
 
 export interface RegisterResponse {

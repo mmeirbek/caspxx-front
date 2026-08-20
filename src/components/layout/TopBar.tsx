@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
   Bell,
+  ChartLine,
   DeviceMobile,
   MapPin,
   MapTrifold as RouteIcon,
@@ -118,6 +119,22 @@ export function TopBar() {
               <Link to="/admin">
                 <ShieldCheck className="h-4 w-4 shrink-0" aria-hidden />
                 <span className="hidden md:inline">{t("nav.admin")}</span>
+              </Link>
+            </Button>
+          )}
+          {isAdmin && (
+            <Button asChild variant="ghost" size="sm" className="hidden gap-1.5 px-2 sm:px-3 lg:inline-flex">
+              <Link to="/carrier-approval">
+                <ShieldCheck className="h-4 w-4 shrink-0" aria-hidden />
+                <span className="hidden md:inline">{t("nav.carrierApproval")}</span>
+              </Link>
+            </Button>
+          )}
+          {isAdmin && (
+            <Button asChild variant="ghost" size="sm" className="hidden gap-1.5 px-2 sm:px-3 lg:inline-flex">
+              <Link to="/admin-dashboard">
+                <ChartLine className="h-4 w-4 shrink-0" aria-hidden />
+                <span className="hidden md:inline">{t("nav.adminDashboard")}</span>
               </Link>
             </Button>
           )}

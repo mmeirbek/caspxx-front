@@ -32,9 +32,14 @@ export interface CreateOrderPayload {
   isReefer?: boolean;
   tempMin?: number;
   tempMax?: number;
+  optimalTemperature?: number;
+  optimalHumidity?: number;
+  isFragile?: boolean;
 }
 
 export type UpdateOrderPayload = Partial<CreateOrderPayload>;
+
+const MAX_AVAILABLE_ORDERS = 5;
 
 export function listMineOrders(accessToken: string): Promise<{ orders: Order[] }> {
   return apiRequest<{ orders: Order[] }>(API_ENDPOINTS.orders.mine, {
@@ -45,7 +50,9 @@ export function listMineOrders(accessToken: string): Promise<{ orders: Order[] }
 export function listAvailableOrders(accessToken: string): Promise<{ orders: Order[] }> {
   return apiRequest<{ orders: Order[] }>(API_ENDPOINTS.orders.available, {
     auth: accessToken,
-  });
+  }).then((response) => ({
+    orders: response.orders.slice(0, MAX_AVAILABLE_ORDERS),
+  }));
 }
 
 export function getOrder(accessToken: string, orderId: string): Promise<{ order: Order }> {

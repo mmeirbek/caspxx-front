@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { PhoneInput, normalizeKzPhone } from "@/components/ui/phone-input";
 import {
   Select,
@@ -41,6 +42,8 @@ const registerSchema = z
     phone: z.string().min(6),
     role: z.enum(["CLIENT", "CARRIER"]),
     companyName: z.string().optional(),
+    personalDataConsent: z.boolean().refine((value) => value, "Consent is required"),
+    privacyPolicyConsent: z.boolean().refine((value) => value, "Consent is required"),
   })
   .refine((data) => data.role !== "CARRIER" || (data.companyName?.trim().length ?? 0) > 0, {
     message: "Company name is required for carriers",
@@ -64,6 +67,8 @@ function RegisterPage() {
       phone: "",
       role: "CLIENT",
       companyName: "",
+      personalDataConsent: false,
+      privacyPolicyConsent: false,
     },
   });
 
@@ -79,6 +84,8 @@ function RegisterPage() {
         lastName: values.lastName,
         phone: normalizeKzPhone(values.phone),
         companyName: values.companyName || undefined,
+        personalDataConsent: values.personalDataConsent,
+        privacyPolicyConsent: values.privacyPolicyConsent,
       });
       toast.success(t("auth.registerSuccess"));
       await navigate({ to: "/login" });
@@ -204,6 +211,44 @@ function RegisterPage() {
                   )}
                 />
               )}
+              <div className="space-y-3 rounded-lg border p-3">
+                <FormField
+                  control={form.control}
+                  name="personalDataConsent"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start gap-3 space-y-0">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={(checked) => field.onChange(checked === true)}
+                        />
+                      </FormControl>
+                      <FormLabel className="text-sm font-normal leading-5">
+                        {t("auth.personalDataConsent")}
+                      </FormLabel>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="privacyPolicyConsent"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start gap-3 space-y-0">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={(checked) => field.onChange(checked === true)}
+                        />
+                      </FormControl>
+                      <FormLabel className="text-sm font-normal leading-5">
+                        {t("auth.privacyPolicyConsent")}
+                      </FormLabel>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               {form.formState.errors.root && (
                 <p className="text-sm text-destructive">{form.formState.errors.root.message}</p>
               )}

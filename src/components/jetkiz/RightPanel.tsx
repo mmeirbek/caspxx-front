@@ -32,6 +32,7 @@ export function RightPanel({
   predictionOrders,
   recentOrders,
   onClose,
+  canTake,
 }: {
   role: UserRole;
   kpis: KpiItem[];
@@ -46,6 +47,7 @@ export function RightPanel({
   predictionOrders: Order[];
   recentOrders: Order[];
   onClose?: () => void;
+  canTake: boolean;
 }) {
   const { t, i18n } = useTranslation();
   const lang = (i18n.resolvedLanguage ?? "ru") as "ru" | "en" | "kk";
@@ -95,6 +97,7 @@ export function RightPanel({
           takePendingId={takePendingId}
           freeWeight={freeWeight}
           freeVolume={freeVolume}
+          canTake={canTake}
         />
       ) : (
         <SensorsSection items={sensorItems} />

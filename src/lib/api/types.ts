@@ -71,6 +71,9 @@ export interface Order {
   isReefer: boolean;
   tempMin: number | null;
   tempMax: number | null;
+  optimalTemperature: number | null;
+  optimalHumidity: number | null;
+  isFragile: boolean;
   status: OrderStatus;
   createdAt: string;
   updatedAt: string;
@@ -425,6 +428,8 @@ export interface AnalyticsEconomic {
   savedFuelLiters: number;
   fuelPriceTengePerLiter: number;
   savedMoneyTenge: number;
+  savedEmptyKm: number;
+  savedHours: number;
   savedHours: number;
   assumptions: {
     baselineEmptyRatio: number;
@@ -483,6 +488,8 @@ export interface CarrierRoutePlan {
   vehicle: CarrierRoutePlanVehicle | null;
   capacityTons: number;
   freeTons: number;
+  savedFuelLiters: number;
+  savedMoneyTenge: number;
   route: {
     distanceKm: number;
     durationMinutes: number;

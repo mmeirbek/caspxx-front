@@ -60,6 +60,9 @@ const newOrderSchema = z
     isReefer: z.boolean(),
     tempMin: z.coerce.number().optional(),
     tempMax: z.coerce.number().optional(),
+    optimalTemperature: z.coerce.number().min(-100).max(100).optional(),
+    optimalHumidity: z.coerce.number().min(0).max(100).optional(),
+    isFragile: z.boolean(),
   })
   .refine(
     (v) =>
@@ -138,6 +141,9 @@ function NewOrderPage() {
       isReefer: false,
       tempMin: undefined,
       tempMax: undefined,
+      optimalTemperature: undefined,
+      optimalHumidity: undefined,
+      isFragile: false,
     },
   });
 
@@ -163,6 +169,9 @@ function NewOrderPage() {
         isReefer: values.isReefer,
         tempMin: values.tempMin,
         tempMax: values.tempMax,
+        optimalTemperature: values.optimalTemperature,
+        optimalHumidity: values.optimalHumidity,
+        isFragile: values.isFragile,
       });
       const token = getAccessToken() ?? "";
       if (cargoFile) {
@@ -310,6 +319,51 @@ function NewOrderPage() {
                   />
                 </div>
               )}
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="optimalTemperature"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("orders.fields.optimalTemperature")}</FormLabel>
+                      <FormControl>
+                        <Input type="number" step="any" placeholder="18" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="optimalHumidity"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("orders.fields.optimalHumidity")}</FormLabel>
+                      <FormControl>
+                        <Input type="number" min={0} max={100} step="1" placeholder="60" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="isFragile"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start gap-3 space-y-0 rounded-lg border p-3">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={(checked) => field.onChange(checked === true)}
+                      />
+                    </FormControl>
+                    <FormLabel>{t("orders.fields.isFragile")}</FormLabel>
+                  </FormItem>
+                )}
+              />
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <p className="text-sm text-muted-foreground sm:col-span-2">

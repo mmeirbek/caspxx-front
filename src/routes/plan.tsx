@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { CircleMarker, MapContainer, Polyline, Popup, TileLayer } from "react-leaflet";
-import { ArrowDown, ArrowUp, MapPinLine, Package, Truck } from "@phosphor-icons/react";
+import { ArrowDown, ArrowUp, GasPump, MapPinLine, Package, RoadHorizon, Timer, Truck, Wallet } from "@phosphor-icons/react";
 
 import { requireRole } from "@/lib/auth/guards";
 import { getAccessToken } from "@/lib/auth/storage";
@@ -147,7 +147,7 @@ function PlanPage() {
   }));
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">{t("plan.title")}</h1>
         <p className="text-sm text-muted-foreground">{t("plan.subtitle")}</p>
@@ -165,6 +165,50 @@ function PlanPage() {
                   {t("plan.ordersCount")}
                 </div>
                 <p className="mt-1 text-2xl font-bold tabular-nums">{data.orders.length}</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <RoadHorizon className="h-4 w-4" aria-hidden />
+                  {t("plan.savedEmptyKm")}
+                </div>
+                <p className="mt-1 text-2xl font-bold tabular-nums">
+                  {data.savedEmptyKm.toLocaleString("ru-RU")} км
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Timer className="h-4 w-4" aria-hidden />
+                  {t("plan.savedHours")}
+                </div>
+                <p className="mt-1 text-2xl font-bold tabular-nums">
+                  {data.savedHours.toFixed(1)} ч
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <GasPump className="h-4 w-4" aria-hidden />
+                  {t("plan.savedFuel")}
+                </div>
+                <p className="mt-1 text-2xl font-bold tabular-nums">
+                  {data.savedFuelLiters.toFixed(1)} л
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Wallet className="h-4 w-4" aria-hidden />
+                  {t("plan.savedMoney")}
+                </div>
+                <p className="mt-1 text-2xl font-bold tabular-nums">
+                  {data.savedMoneyTenge.toLocaleString("ru-RU")} ₸
+                </p>
               </CardContent>
             </Card>
             <Card>
