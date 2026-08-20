@@ -4,11 +4,26 @@ import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
+const API_TARGET = process.env.VITE_API_BASE_URL ?? "https://api.byapex.dev";
+
 export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
     allowedHosts: true,
+    proxy: {
+      "/api": {
+        target: API_TARGET,
+        changeOrigin: true,
+        secure: true,
+      },
+      "/caspex": {
+        target: API_TARGET,
+        changeOrigin: true,
+        secure: true,
+        ws: true,
+      },
+    },
   },
   resolve: {
     alias: {

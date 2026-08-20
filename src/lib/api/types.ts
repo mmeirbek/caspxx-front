@@ -428,8 +428,6 @@ export interface AnalyticsEconomic {
   savedFuelLiters: number;
   fuelPriceTengePerLiter: number;
   savedMoneyTenge: number;
-  savedEmptyKm: number;
-  savedHours: number;
   savedHours: number;
   assumptions: {
     baselineEmptyRatio: number;
@@ -490,6 +488,8 @@ export interface CarrierRoutePlan {
   freeTons: number;
   savedFuelLiters: number;
   savedMoneyTenge: number;
+  savedEmptyKm: number;
+  savedHours: number;
   route: {
     distanceKm: number;
     durationMinutes: number;
