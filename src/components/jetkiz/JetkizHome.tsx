@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import {
   CalendarDots,
@@ -43,6 +44,7 @@ const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 export function JetkizHome() {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const token = getAccessToken() ?? "";
   const queryClient = useQueryClient();
   const isCarrier = user?.role === "CARRIER";
@@ -385,6 +387,38 @@ export function JetkizHome() {
           <List className="h-5 w-5" />
         </button>
       )}
+
+      <button
+        type="button"
+        onClick={() => {
+          if (isCarrier) {
+            setSidebarOpen((v) => !v);
+          } else {
+            void navigate({ to: "/orders/new" });
+          }
+        }}
+        aria-expanded={isCarrier ? sidebarOpen : undefined}
+        className={
+          "pointer-events-auto absolute bottom-4 z-[460] inline-flex items-center gap-2 rounded-full border bg-card px-4 py-2 text-sm font-medium shadow-md transition-[left] duration-300 ease-out hover:bg-muted " +
+          (isCarrier
+            ? sidebarOpen
+              ? "left-[calc((100%-min(85vw,24rem))/2)] md:left-[31%] lg:left-[33%] xl:left-[35%]"
+              : "left-1/2 -translate-x-1/2"
+            : "left-1/2 -translate-x-1/2")
+        }
+      >
+        {isCarrier ? (
+          <>
+            <List className="h-4 w-4" />
+            {sidebarOpen ? t("jetkiz.closePanel") : t("jetkiz.openPanel")}
+          </>
+        ) : (
+          <>
+            <Package className="h-4 w-4" />
+            {t("orders.create")}
+          </>
+        )}
+      </button>
 
       {sidebarOpen && (
         <div

@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PhoneInput, normalizeKzPhone } from "@/components/ui/phone-input";
 import {
   Select,
   SelectContent,
@@ -76,7 +77,7 @@ function RegisterPage() {
         role: values.role as UserRole,
         firstName: values.firstName,
         lastName: values.lastName,
-        phone: values.phone,
+        phone: normalizeKzPhone(values.phone),
         companyName: values.companyName || undefined,
       });
       toast.success(t("auth.registerSuccess"));
@@ -182,7 +183,7 @@ function RegisterPage() {
                   <FormItem>
                     <FormLabel>{t("auth.phone")}</FormLabel>
                     <FormControl>
-                      <Input type="tel" autoComplete="tel" {...field} />
+                      <PhoneInput {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

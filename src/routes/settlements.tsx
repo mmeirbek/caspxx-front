@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { CircleMarker, MapContainer, Popup, TileLayer } from "react-leaflet";
-import { useMemo, useState } from "react";
+import { CircleMarker, MapContainer, Popup, TileLayer, useMap } from "react-leaflet";
+import { useEffect, useMemo, useState } from "react";
 import { MapPin } from "@phosphor-icons/react";
 
 import { listSettlements } from "@/lib/api/settlements";
@@ -12,6 +12,7 @@ import { ErrorState } from "@/components/shared/ErrorState";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/settlements")({
   component: SettlementsPage,
@@ -23,7 +24,23 @@ function localizeName(s: Settlement, lang: string): string {
   return s.name;
 }
 
-function SettlementMap({ settlements }: { settlements: Settlement[] }) {
+function SettlementMap({
+  settlements,
+  selected,
+}: {
+  settlements: Settlement[];
+  selected: Settlement | null;
+}) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (selected) {
+      map.flyTo([selected.latitude, selected.longitude], 10, { duration: 0.8 });
+    }
+  }, [selected, map]);
+
+  const shown = selected ? [selected] : settlements;
+
   return (
     <div className="h-72 w-full overflow-hidden rounded-lg border">
       <MapContainer
@@ -36,12 +53,16 @@ function SettlementMap({ settlements }: { settlements: Settlement[] }) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {settlements.map((s) => (
+        {shown.map((s) => (
           <CircleMarker
             key={s.id}
             center={[s.latitude, s.longitude]}
-            radius={6}
-            pathOptions={{ color: "#2563eb", fillColor: "#2563eb", fillOpacity: 0.7 }}
+            radius={selected ? 10 : 6}
+            pathOptions={
+              selected
+                ? { color: "#dc2626", fillColor: "#dc2626", fillOpacity: 0.85 }
+                : { color: "#2563eb", fillColor: "#2563eb", fillOpacity: 0.7 }
+            }
           >
             <Popup>
               <p className="font-medium">{s.nameRu}</p>
@@ -56,10 +77,26 @@ function SettlementMap({ settlements }: { settlements: Settlement[] }) {
   );
 }
 
-function SettlementCard({ settlement, lang }: { settlement: Settlement; lang: string }) {
+function SettlementCard({
+  settlement,
+  lang,
+  selected,
+  onSelect,
+}: {
+  settlement: Settlement;
+  lang: string;
+  selected: boolean;
+  onSelect: () => void;
+}) {
   const { t } = useTranslation();
   return (
-    <Card className="transition hover:border-primary/50 hover:shadow-sm">
+    <Card
+      className={cn(
+        "cursor-pointer transition hover:border-primary/50 hover:shadow-sm",
+        selected && "border-primary bg-primary/5 ring-2 ring-primary/30",
+      )}
+      onClick={onSelect}
+    >
       <CardContent className="p-4">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
@@ -89,6 +126,7 @@ function SettlementsPage() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const [query, setQuery] = useState("");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["settlements"],
@@ -133,7 +171,20 @@ function SettlementsPage() {
         className="max-w-md"
       />
 
-      <SettlementMap settlements={settlements} />
+      <SettlementMap
+        settlements={settlements}
+        selected={settlements.find((s) => s.id === selectedId) ?? null}
+      />
+
+      {selectedId && (
+        <button
+          type="button"
+          onClick={() => setSelectedId(null)}
+          className="text-sm text-primary underline-offset-4 hover:underline"
+        >
+          {t("settlements.showAll")}
+        </button>
+      )}
 
       {settlements.length === 0 ? (
         <EmptyState title={t("settlements.empty")} />
@@ -146,7 +197,13 @@ function SettlementsPage() {
               </CardHeader>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {list.map((s) => (
-                  <SettlementCard key={s.id} settlement={s} lang={lang} />
+                  <SettlementCard
+                    key={s.id}
+                    settlement={s}
+                    lang={lang}
+                    selected={s.id === selectedId}
+                    onSelect={() => setSelectedId((cur) => (cur === s.id ? null : s.id))}
+                  />
                 ))}
               </div>
             </section>

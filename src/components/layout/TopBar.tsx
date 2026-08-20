@@ -1,6 +1,14 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, MapTrifold as RouteIcon } from "@phosphor-icons/react";
+import {
+  Bell,
+  DeviceMobile,
+  MapPin,
+  MapTrifold as RouteIcon,
+  RoadHorizon,
+  ShieldCheck,
+  Sparkle,
+} from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -54,10 +62,9 @@ export function TopBar() {
   const isAdmin = user?.role === "SUPERADMIN" || user?.role === "ADMIN";
 
   const navItems = [
-    { to: "/", label: t("nav.map"), icon: "MapTrifold", mobile: true },
-    { to: "/orders", label: t("nav.orders"), icon: "Package", mobile: true },
-    { to: "/devices", label: t("nav.devices"), icon: "DeviceMobile", mobile: true },
-    { to: "/predictions", label: t("nav.predictions"), icon: "Sparkle", mobile: false },
+    { to: "/", label: t("nav.map"), icon: RouteIcon },
+    { to: "/devices", label: t("nav.devices"), icon: DeviceMobile },
+    { to: "/predictions", label: t("nav.predictions"), icon: Sparkle },
   ];
 
   const isActive = (to: string) =>
@@ -77,32 +84,41 @@ export function TopBar() {
 
       {isAuthenticated && (
         <nav className="flex min-w-0 flex-1 items-center gap-1">
-          {navItems.map((item) => (
-            <Button
-              key={item.to}
-              asChild
-              variant="ghost"
-              size="sm"
-              className={cn(
-                "gap-1.5",
-                !item.mobile && "hidden sm:inline-flex",
-                isActive(item.to) && "bg-primary/15 text-primary shadow-sm ring-1 ring-primary/20",
-              )}
-            >
-              <Link to={item.to}>{item.label}</Link>
-            </Button>
-          ))}
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Button
+                key={item.to}
+                asChild
+                variant="ghost"
+                size="sm"
+                className={cn(
+                  "gap-1.5 px-2 sm:px-3",
+                  isActive(item.to) &&
+                    "bg-primary/15 text-primary shadow-sm ring-1 ring-primary/20",
+                )}
+              >
+                <Link to={item.to}>
+                  <Icon className="h-4 w-4 shrink-0" aria-hidden />
+                  <span className="hidden md:inline">{item.label}</span>
+                </Link>
+              </Button>
+            );
+          })}
           {isAdmin && (
             <Button
               asChild
               variant="ghost"
               size="sm"
               className={cn(
-                "hidden lg:inline-flex gap-1.5",
+                "hidden lg:inline-flex gap-1.5 px-2 sm:px-3",
                 isActive("/admin") && "bg-primary/15 text-primary shadow-sm ring-1 ring-primary/20",
               )}
             >
-              <Link to="/admin">{t("nav.admin")}</Link>
+              <Link to="/admin">
+                <ShieldCheck className="h-4 w-4 shrink-0" aria-hidden />
+                <span className="hidden md:inline">{t("nav.admin")}</span>
+              </Link>
             </Button>
           )}
           {user?.role === "CARRIER" && (
@@ -111,11 +127,14 @@ export function TopBar() {
               variant="ghost"
               size="sm"
               className={cn(
-                "hidden sm:inline-flex gap-1.5",
+                "gap-1.5 px-2 sm:px-3",
                 isActive("/plan") && "bg-primary/15 text-primary shadow-sm ring-1 ring-primary/20",
               )}
             >
-              <Link to="/plan">{t("nav.plan")}</Link>
+              <Link to="/plan">
+                <RoadHorizon className="h-4 w-4 shrink-0" aria-hidden />
+                <span className="hidden md:inline">{t("nav.plan")}</span>
+              </Link>
             </Button>
           )}
         </nav>
@@ -127,12 +146,15 @@ export function TopBar() {
           variant="ghost"
           size="sm"
           className={cn(
-            "hidden sm:inline-flex gap-1.5",
+            "gap-1.5 px-2 sm:px-3",
             isActive("/settlements") &&
               "bg-primary/15 text-primary shadow-sm ring-1 ring-primary/20",
           )}
         >
-          <Link to="/settlements">{t("nav.settlements")}</Link>
+          <Link to="/settlements">
+            <MapPin className="h-4 w-4 shrink-0" aria-hidden />
+            <span className="hidden md:inline">{t("nav.settlements")}</span>
+          </Link>
         </Button>
         {isAuthenticated && (
           <>

@@ -255,13 +255,56 @@ export interface CameraSnapshot {
 
 export type PredictionRiskLevel = "low" | "medium" | "high";
 
+export interface PredictionData {
+  route: {
+    distanceKm: number;
+    durationHours: number;
+  };
+  weather: {
+    risk: PredictionRiskLevel;
+    wind: number;
+    rain: boolean;
+  };
+  checkpoints: Array<{
+    name: string;
+    load: number;
+    wait: number;
+  }>;
+  railway: Array<{
+    station: string;
+    load: number;
+  }>;
+}
+
 export interface LandPrediction {
   orderId: string;
+  title: string;
+  origin: string;
+  destination: string;
   recommendation: string;
   riskLevel: string;
   bestDepartureTime: string;
   expectedDelayMinutes: number;
   shortExplanation: string;
+  data: PredictionData;
+  source: string;
+  generatedAt: string;
+}
+
+export interface LandPredictionListResponse {
+  predictions: LandPrediction[];
+}
+
+export interface GeocodeResult {
+  label: string;
+  latitude: number;
+  longitude: number;
+  settlementId: string | null;
+  source: "local" | "osm";
+}
+
+export interface GeocodeResponse {
+  results: GeocodeResult[];
 }
 
 export interface CargoTypeOption {

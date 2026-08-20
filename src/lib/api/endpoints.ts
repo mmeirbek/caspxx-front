@@ -68,6 +68,7 @@ export const API_ENDPOINTS = {
   predictions: {
     land: "/predictions/land",
   },
+  geocode: "/geocode",
   cameras: {
     orderLatest: (id: string) => `/cameras/orders/${id}/latest`,
     deviceLatest: (id: string) => `/cameras/devices/${id}/latest`,

@@ -100,11 +100,13 @@ export function RightPanel({
         <SensorsSection items={sensorItems} />
       )}
 
-      <LiveCameraSection items={cameraItems} />
-
       <PredictionsSection orders={predictionOrders} />
 
       <RecentOrders orders={recentOrders} />
+
+      <div className="pb-2 sm:pb-3">
+        <LiveCameraSection items={cameraItems} />
+      </div>
     </div>
   );
 }

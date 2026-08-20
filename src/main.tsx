@@ -74,7 +74,16 @@ function AppRouter() {
   return (
     <RouterContextProvider router={router} context={context}>
       <AppShell>
-        <RouterProvider router={router} />
+        {auth.loading ? (
+          <div className="flex min-h-[60vh] items-center justify-center">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <span className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+              <span>{i18n.t("common.loading")}</span>
+            </div>
+          </div>
+        ) : (
+          <RouterProvider router={router} />
+        )}
       </AppShell>
     </RouterContextProvider>
   );

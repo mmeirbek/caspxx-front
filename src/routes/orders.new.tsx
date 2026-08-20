@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/select";
 import { PointPicker } from "@/components/map/PointPicker";
 import { SettlementPicker, localizeSettlementName } from "@/components/orders/SettlementPicker";
+import { GeocodeAddressInput } from "@/components/orders/GeocodeAddressInput";
 
 export const Route = createFileRoute("/orders/new")({
   beforeLoad: ({ context }) => requireAuth(context),
@@ -339,7 +340,18 @@ function NewOrderPage() {
                       <FormItem>
                         <FormLabel>{t("orders.fields.origin")}</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <GeocodeAddressInput
+                            value={field.value}
+                            placeholder={t("orders.geocode.placeholder")}
+                            onChange={(val) => form.setValue("origin", val)}
+                            onSelect={(r) => {
+                              form.setValue("origin", r.label, { shouldValidate: true });
+                              form.setValue("originCity", r.label);
+                              form.setValue("originLat", r.latitude, { shouldValidate: true });
+                              form.setValue("originLng", r.longitude, { shouldValidate: true });
+                              form.setValue("originSettlementId", r.settlementId ?? "");
+                            }}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -410,7 +422,22 @@ function NewOrderPage() {
                       <FormItem>
                         <FormLabel>{t("orders.fields.destination")}</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <GeocodeAddressInput
+                            value={field.value}
+                            placeholder={t("orders.geocode.placeholder")}
+                            onChange={(val) => form.setValue("destination", val)}
+                            onSelect={(r) => {
+                              form.setValue("destination", r.label, { shouldValidate: true });
+                              form.setValue("destinationCity", r.label);
+                              form.setValue("destinationLat", r.latitude, {
+                                shouldValidate: true,
+                              });
+                              form.setValue("destinationLng", r.longitude, {
+                                shouldValidate: true,
+                              });
+                              form.setValue("destinationSettlementId", r.settlementId ?? "");
+                            }}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
