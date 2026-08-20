@@ -1,6 +1,11 @@
 import { API_ENDPOINTS } from "@/lib/api/endpoints";
 import { apiRequest } from "@/lib/api/client";
-import type { Order, OrderStatus } from "@/lib/api/types";
+import type {
+  Order,
+  OrderAssignmentResponse,
+  OrderCreationResponse,
+  OrderStatus,
+} from "@/lib/api/types";
 
 export interface CreateOrderPayload {
   title: string;
@@ -8,20 +13,25 @@ export interface CreateOrderPayload {
   weight: number;
   volume: number;
   origin: string;
+  originSettlementId?: string;
   originCity?: string;
   originCountry?: string;
   destination: string;
+  destinationSettlementId?: string;
   destinationCity?: string;
   destinationCountry?: string;
-  originLat: number;
-  originLng: number;
-  destinationLat: number;
-  destinationLng: number;
+  originLat?: number;
+  originLng?: number;
+  destinationLat?: number;
+  destinationLng?: number;
   cargoPhotoUrl?: string;
   productPhotoUrls?: string[];
   comment?: string;
   estimatedPrice?: number;
   estimatedDeliveryTime?: number;
+  isReefer?: boolean;
+  tempMin?: number;
+  tempMax?: number;
 }
 
 export type UpdateOrderPayload = Partial<CreateOrderPayload>;
@@ -47,8 +57,8 @@ export function getOrder(accessToken: string, orderId: string): Promise<{ order:
 export function createOrder(
   accessToken: string,
   payload: CreateOrderPayload,
-): Promise<{ order: Order }> {
-  return apiRequest<{ order: Order }>(API_ENDPOINTS.orders.create, {
+): Promise<OrderCreationResponse> {
+  return apiRequest<OrderCreationResponse>(API_ENDPOINTS.orders.create, {
     method: "POST",
     auth: accessToken,
     body: payload,
@@ -79,8 +89,11 @@ export function updateOrderStatus(
   });
 }
 
-export function assignOrder(accessToken: string, orderId: string): Promise<{ order: Order }> {
-  return apiRequest<{ order: Order }>(API_ENDPOINTS.orders.assign(orderId), {
+export function assignOrder(
+  accessToken: string,
+  orderId: string,
+): Promise<OrderAssignmentResponse> {
+  return apiRequest<OrderAssignmentResponse>(API_ENDPOINTS.orders.assign(orderId), {
     method: "POST",
     auth: accessToken,
   });

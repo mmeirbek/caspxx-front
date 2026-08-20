@@ -50,6 +50,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { AnalyticsTab } from "@/components/analytics/AnalyticsTab";
 
 export const Route = createFileRoute("/admin")({
   beforeLoad: ({ context }) => requireAuth(context),
@@ -562,6 +563,7 @@ function AdminPage() {
           <TabsTrigger value="carriers">{t("superadmin.carriers")}</TabsTrigger>
           <TabsTrigger value="vehicles">{t("superadmin.vehicles")}</TabsTrigger>
           <TabsTrigger value="orders">{t("superadmin.orders")}</TabsTrigger>
+          <TabsTrigger value="analytics">{t("nav.analytics")}</TabsTrigger>
         </TabsList>
         <TabsContent value="users" className="mt-4">
           <UsersTab />
@@ -574,6 +576,9 @@ function AdminPage() {
         </TabsContent>
         <TabsContent value="orders" className="mt-4">
           <OrdersTab />
+        </TabsContent>
+        <TabsContent value="analytics" className="mt-4">
+          <AnalyticsTab />
         </TabsContent>
       </Tabs>
     </div>

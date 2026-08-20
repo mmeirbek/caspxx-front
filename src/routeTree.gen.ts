@@ -12,14 +12,17 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as PlanRouteImport } from './routes/plan'
 import { Route as PredictionsRouteImport } from './routes/predictions'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as SettlementsRouteImport } from './routes/settlements'
 import { Route as CarrierApplyRouteImport } from './routes/carrier.apply'
 import { Route as DevicesIndexRouteImport } from './routes/devices.index'
 import { Route as DevicesDeviceIdRouteImport } from './routes/devices.$deviceId'
 import { Route as OrdersIndexRouteImport } from './routes/orders.index'
 import { Route as OrdersOrderIdRouteImport } from './routes/orders.$orderId'
 import { Route as OrdersNewRouteImport } from './routes/orders.new'
+import { Route as RouteConditionsOrderIdRouteImport } from './routes/route-conditions.$orderId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -36,6 +39,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlanRoute = PlanRouteImport.update({
+  id: '/plan',
+  path: '/plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PredictionsRoute = PredictionsRouteImport.update({
   id: '/predictions',
   path: '/predictions',
@@ -44,6 +52,11 @@ const PredictionsRoute = PredictionsRouteImport.update({
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettlementsRoute = SettlementsRouteImport.update({
+  id: '/settlements',
+  path: '/settlements',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CarrierApplyRoute = CarrierApplyRouteImport.update({
@@ -76,17 +89,25 @@ const OrdersNewRoute = OrdersNewRouteImport.update({
   path: '/orders/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RouteConditionsOrderIdRoute = RouteConditionsOrderIdRouteImport.update({
+  id: '/route-conditions/$orderId',
+  path: '/route-conditions/$orderId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
+  '/plan': typeof PlanRoute
   '/predictions': typeof PredictionsRoute
   '/register': typeof RegisterRoute
+  '/settlements': typeof SettlementsRoute
   '/carrier/apply': typeof CarrierApplyRoute
   '/devices/$deviceId': typeof DevicesDeviceIdRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
+  '/route-conditions/$orderId': typeof RouteConditionsOrderIdRoute
   '/devices/': typeof DevicesIndexRoute
   '/orders/': typeof OrdersIndexRoute
 }
@@ -94,12 +115,15 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
+  '/plan': typeof PlanRoute
   '/predictions': typeof PredictionsRoute
   '/register': typeof RegisterRoute
+  '/settlements': typeof SettlementsRoute
   '/carrier/apply': typeof CarrierApplyRoute
   '/devices/$deviceId': typeof DevicesDeviceIdRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
+  '/route-conditions/$orderId': typeof RouteConditionsOrderIdRoute
   '/devices': typeof DevicesIndexRoute
   '/orders': typeof OrdersIndexRoute
 }
@@ -108,12 +132,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
+  '/plan': typeof PlanRoute
   '/predictions': typeof PredictionsRoute
   '/register': typeof RegisterRoute
+  '/settlements': typeof SettlementsRoute
   '/carrier/apply': typeof CarrierApplyRoute
   '/devices/$deviceId': typeof DevicesDeviceIdRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
+  '/route-conditions/$orderId': typeof RouteConditionsOrderIdRoute
   '/devices/': typeof DevicesIndexRoute
   '/orders/': typeof OrdersIndexRoute
 }
@@ -123,12 +150,15 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
+    | '/plan'
     | '/predictions'
     | '/register'
+    | '/settlements'
     | '/carrier/apply'
     | '/devices/$deviceId'
     | '/orders/$orderId'
     | '/orders/new'
+    | '/route-conditions/$orderId'
     | '/devices/'
     | '/orders/'
   fileRoutesByTo: FileRoutesByTo
@@ -136,12 +166,15 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
+    | '/plan'
     | '/predictions'
     | '/register'
+    | '/settlements'
     | '/carrier/apply'
     | '/devices/$deviceId'
     | '/orders/$orderId'
     | '/orders/new'
+    | '/route-conditions/$orderId'
     | '/devices'
     | '/orders'
   id:
@@ -149,12 +182,15 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
+    | '/plan'
     | '/predictions'
     | '/register'
+    | '/settlements'
     | '/carrier/apply'
     | '/devices/$deviceId'
     | '/orders/$orderId'
     | '/orders/new'
+    | '/route-conditions/$orderId'
     | '/devices/'
     | '/orders/'
   fileRoutesById: FileRoutesById
@@ -163,12 +199,15 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   LoginRoute: typeof LoginRoute
+  PlanRoute: typeof PlanRoute
   PredictionsRoute: typeof PredictionsRoute
   RegisterRoute: typeof RegisterRoute
+  SettlementsRoute: typeof SettlementsRoute
   CarrierApplyRoute: typeof CarrierApplyRoute
   DevicesDeviceIdRoute: typeof DevicesDeviceIdRoute
   OrdersOrderIdRoute: typeof OrdersOrderIdRoute
   OrdersNewRoute: typeof OrdersNewRoute
+  RouteConditionsOrderIdRoute: typeof RouteConditionsOrderIdRoute
   DevicesIndexRoute: typeof DevicesIndexRoute
   OrdersIndexRoute: typeof OrdersIndexRoute
 }
@@ -196,6 +235,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/plan': {
+      id: '/plan'
+      path: '/plan'
+      fullPath: '/plan'
+      preLoaderRoute: typeof PlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/predictions': {
       id: '/predictions'
       path: '/predictions'
@@ -208,6 +254,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settlements': {
+      id: '/settlements'
+      path: '/settlements'
+      fullPath: '/settlements'
+      preLoaderRoute: typeof SettlementsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/carrier/apply': {
@@ -252,6 +305,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrdersNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/route-conditions/$orderId': {
+      id: '/route-conditions/$orderId'
+      path: '/route-conditions/$orderId'
+      fullPath: '/route-conditions/$orderId'
+      preLoaderRoute: typeof RouteConditionsOrderIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -259,12 +319,15 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   LoginRoute: LoginRoute,
+  PlanRoute: PlanRoute,
   PredictionsRoute: PredictionsRoute,
   RegisterRoute: RegisterRoute,
+  SettlementsRoute: SettlementsRoute,
   CarrierApplyRoute: CarrierApplyRoute,
   DevicesDeviceIdRoute: DevicesDeviceIdRoute,
   OrdersOrderIdRoute: OrdersOrderIdRoute,
   OrdersNewRoute: OrdersNewRoute,
+  RouteConditionsOrderIdRoute: RouteConditionsOrderIdRoute,
   DevicesIndexRoute: DevicesIndexRoute,
   OrdersIndexRoute: OrdersIndexRoute,
 }

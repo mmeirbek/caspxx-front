@@ -14,6 +14,7 @@ import { ApiError } from "@/lib/api/client";
 import { CARGO_TYPES } from "@/lib/utils/cargo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -31,27 +32,39 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PointPicker } from "@/components/map/PointPicker";
+import { SettlementPicker, localizeSettlementName } from "@/components/orders/SettlementPicker";
 
 export const Route = createFileRoute("/orders/new")({
   beforeLoad: ({ context }) => requireAuth(context),
   component: NewOrderPage,
 });
 
-const newOrderSchema = z.object({
-  title: z.string().min(1),
-  cargoType: z.string().min(1),
-  weight: z.coerce.number().min(0),
-  volume: z.coerce.number().min(0),
-  origin: z.string().min(1),
-  originCity: z.string().optional(),
-  destination: z.string().min(1),
-  destinationCity: z.string().optional(),
-  comment: z.string().optional(),
-  originLat: z.number().min(-90).max(90),
-  originLng: z.number().min(-180).max(180),
-  destinationLat: z.number().min(-90).max(90),
-  destinationLng: z.number().min(-180).max(180),
-});
+const newOrderSchema = z
+  .object({
+    title: z.string().min(1),
+    cargoType: z.string().min(1),
+    weight: z.coerce.number().min(0),
+    volume: z.coerce.number().min(0),
+    origin: z.string().min(1),
+    originSettlementId: z.string().optional(),
+    originCity: z.string().optional(),
+    destination: z.string().min(1),
+    destinationSettlementId: z.string().optional(),
+    destinationCity: z.string().optional(),
+    comment: z.string().optional(),
+    originLat: z.number().min(-90).max(90),
+    originLng: z.number().min(-180).max(180),
+    destinationLat: z.number().min(-90).max(90),
+    destinationLng: z.number().min(-180).max(180),
+    isReefer: z.boolean(),
+    tempMin: z.coerce.number().optional(),
+    tempMax: z.coerce.number().optional(),
+  })
+  .refine(
+    (v) =>
+      !v.isReefer || (v.tempMin !== undefined && v.tempMax !== undefined && v.tempMax >= v.tempMin),
+    { message: "temp range required", path: ["tempMax"] },
+  );
 
 type NewOrderFormValues = z.infer<typeof newOrderSchema>;
 
@@ -97,7 +110,7 @@ function PhotoUpload({
 }
 
 function NewOrderPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [cargoFile, setCargoFile] = useState<File | null>(null);
   const [productFiles, setProductFiles] = useState<File[]>([]);
@@ -111,14 +124,19 @@ function NewOrderPage() {
       weight: 0,
       volume: 0,
       origin: "",
+      originSettlementId: "",
       originCity: "",
       destination: "",
+      destinationSettlementId: "",
       destinationCity: "",
       comment: "",
       originLat: 43.6532,
       originLng: 51.1975,
       destinationLat: 43.1789,
       destinationLng: 51.6814,
+      isReefer: false,
+      tempMin: undefined,
+      tempMax: undefined,
     },
   });
 
@@ -131,14 +149,19 @@ function NewOrderPage() {
         weight: values.weight,
         volume: values.volume,
         origin: values.origin,
+        originSettlementId: values.originSettlementId || undefined,
         originCity: values.originCity || undefined,
         destination: values.destination,
+        destinationSettlementId: values.destinationSettlementId || undefined,
         destinationCity: values.destinationCity || undefined,
         originLat: values.originLat,
         originLng: values.originLng,
         destinationLat: values.destinationLat,
         destinationLng: values.destinationLng,
         comment: values.comment || undefined,
+        isReefer: values.isReefer,
+        tempMin: values.tempMin,
+        tempMax: values.tempMax,
       });
       const token = getAccessToken() ?? "";
       if (cargoFile) {
@@ -239,11 +262,76 @@ function NewOrderPage() {
                 />
               </div>
 
+              <FormField
+                control={form.control}
+                name="isReefer"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start gap-3 space-y-0 rounded-lg border p-3">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={(checked) => field.onChange(checked === true)}
+                      />
+                    </FormControl>
+                    <div className="space-y-1">
+                      <FormLabel>{t("orders.fields.isReefer")}</FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
+              {form.watch("isReefer") && (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <FormField
+                    control={form.control}
+                    name="tempMin"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("orders.fields.tempMin")}</FormLabel>
+                        <FormControl>
+                          <Input type="number" step="any" placeholder="-18" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="tempMax"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("orders.fields.tempMax")}</FormLabel>
+                        <FormControl>
+                          <Input type="number" step="any" placeholder="4" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
+
               <div className="grid gap-4 sm:grid-cols-2">
                 <p className="text-sm text-muted-foreground sm:col-span-2">
                   {t("orders.mangystauOnly")}
                 </p>
                 <div className="space-y-4">
+                  <SettlementPicker
+                    label={t("orders.fields.originSettlement")}
+                    value={form.watch("originSettlementId") ?? ""}
+                    onSelect={(s) => {
+                      if (s) {
+                        form.setValue("origin", localizeSettlementName(s, i18n.language), {
+                          shouldValidate: true,
+                        });
+                        form.setValue("originSettlementId", s.id);
+                        form.setValue("originCity", localizeSettlementName(s, i18n.language));
+                        form.setValue("originLat", s.latitude, { shouldValidate: true });
+                        form.setValue("originLng", s.longitude, { shouldValidate: true });
+                      } else {
+                        form.setValue("originSettlementId", "");
+                      }
+                    }}
+                  />
                   <FormField
                     control={form.control}
                     name="origin"
@@ -298,6 +386,23 @@ function NewOrderPage() {
                   />
                 </div>
                 <div className="space-y-4">
+                  <SettlementPicker
+                    label={t("orders.fields.destinationSettlement")}
+                    value={form.watch("destinationSettlementId") ?? ""}
+                    onSelect={(s) => {
+                      if (s) {
+                        form.setValue("destination", localizeSettlementName(s, i18n.language), {
+                          shouldValidate: true,
+                        });
+                        form.setValue("destinationSettlementId", s.id);
+                        form.setValue("destinationCity", localizeSettlementName(s, i18n.language));
+                        form.setValue("destinationLat", s.latitude, { shouldValidate: true });
+                        form.setValue("destinationLng", s.longitude, { shouldValidate: true });
+                      } else {
+                        form.setValue("destinationSettlementId", "");
+                      }
+                    }}
+                  />
                   <FormField
                     control={form.control}
                     name="destination"

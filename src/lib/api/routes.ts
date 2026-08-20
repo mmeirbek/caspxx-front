@@ -1,6 +1,6 @@
 import { API_ENDPOINTS } from "@/lib/api/endpoints";
 import { apiRequest } from "@/lib/api/client";
-import type { RouteResponse } from "@/lib/api/types";
+import type { CarrierRoutePlan, RouteResponse } from "@/lib/api/types";
 
 export interface CalculateRoutePayload {
   orderId?: string;
@@ -18,5 +18,11 @@ export function calculateRoute(
     method: "POST",
     auth: accessToken,
     body: payload,
+  });
+}
+
+export function planCarrierRoute(accessToken: string): Promise<CarrierRoutePlan> {
+  return apiRequest<CarrierRoutePlan>(API_ENDPOINTS.routes.plan, {
+    auth: accessToken,
   });
 }

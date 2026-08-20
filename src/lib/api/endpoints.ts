@@ -28,6 +28,19 @@ export const API_ENDPOINTS = {
   },
   routes: {
     calculate: "/routes/calculate",
+    plan: "/routes/plan",
+  },
+  settlements: {
+    list: "/settlements",
+    detail: (id: string) => `/settlements/${id}`,
+  },
+  analytics: {
+    flows: "/analytics/flows",
+    regionalSummary: "/analytics/regional-summary",
+    economic: "/analytics/economic",
+  },
+  routeConditions: {
+    forOrder: (id: string) => `/route-conditions/${id}`,
   },
   devices: {
     list: "/devices",

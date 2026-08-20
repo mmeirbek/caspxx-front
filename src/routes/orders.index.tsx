@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { Snowflake } from "@phosphor-icons/react";
 
 import { requireAuth } from "@/lib/auth/guards";
 import { useAuth } from "@/lib/auth/auth-provider";
@@ -58,12 +59,18 @@ function OrderCard({
   origin,
   destination,
   status,
+  isReefer,
+  tempMin,
+  tempMax,
 }: {
   id: string;
   title: string;
   origin: string;
   destination: string;
   status: string;
+  isReefer?: boolean;
+  tempMin?: number | null;
+  tempMax?: number | null;
 }) {
   return (
     <Link to="/orders/$orderId" params={{ orderId: id }}>
@@ -75,6 +82,12 @@ function OrderCard({
               <p className="mt-1 truncate text-sm text-muted-foreground">
                 {origin} → {destination}
               </p>
+              {isReefer && (
+                <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-sky-100 px-2 py-0.5 text-xs font-medium text-sky-700">
+                  <Snowflake className="h-3 w-3" aria-hidden />
+                  {tempMin != null && tempMax != null ? `${tempMin}°C … ${tempMax}°C` : "Reefer"}
+                </span>
+              )}
             </div>
             <StatusBadge status={status} />
           </div>
@@ -115,6 +128,9 @@ function OrdersList({ mode }: { mode: "mine" | "available" }) {
           origin={o.origin}
           destination={o.destination}
           status={o.status}
+          isReefer={o.isReefer}
+          tempMin={o.tempMin}
+          tempMax={o.tempMax}
         />
       ))}
     </div>

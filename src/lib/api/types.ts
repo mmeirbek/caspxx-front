@@ -51,9 +51,11 @@ export interface Order {
   weight: number;
   volume: number;
   origin: string;
+  originSettlementId: string | null;
   originCity: string | null;
   originCountry: string | null;
   destination: string;
+  destinationSettlementId: string | null;
   destinationCity: string | null;
   destinationCountry: string | null;
   originLat: number | null;
@@ -66,6 +68,9 @@ export interface Order {
   estimatedPrice: number | null;
   estimatedDeliveryTime: number | null;
   estimatedCarrierSearchTime: number | null;
+  isReefer: boolean;
+  tempMin: number | null;
+  tempMax: number | null;
   status: OrderStatus;
   createdAt: string;
   updatedAt: string;
@@ -272,4 +277,175 @@ export interface ErrorEnvelope {
   statusCode: number;
   message: string | string[];
   error?: string;
+}
+
+export interface Settlement {
+  id: string;
+  name: string;
+  nameRu: string;
+  nameKk: string;
+  type: string;
+  district: string;
+  latitude: number;
+  longitude: number;
+  source: string;
+}
+
+export interface SettlementEnvelope {
+  settlement: Settlement;
+}
+
+export interface SettlementsListResponse {
+  settlements: Settlement[];
+}
+
+export interface RouteConditionWarning {
+  type: string;
+  severity: "info" | "warning" | "critical";
+  message: string;
+}
+
+export interface RouteConditionsSummary {
+  maxTemperature: number | null;
+  minTemperature: number | null;
+  maxWindMs: number | null;
+  rain: boolean;
+  snow: boolean;
+  dust: boolean;
+  warnings: RouteConditionWarning[];
+  estimatedDelayMinutes: number;
+}
+
+export interface RouteWeatherPoint {
+  lat: number;
+  lng: number;
+  temperature: number;
+  windSpeed: number;
+  rain: boolean;
+  snow: boolean;
+  description: string;
+}
+
+export interface RouteCheckpoint {
+  name: string;
+  loadPercent: number;
+}
+
+export interface RouteConditions {
+  orderId: string;
+  origin: string;
+  destination: string;
+  distanceKm: number;
+  durationMinutes: number;
+  etaMinutes: number;
+  conditions: RouteConditionsSummary;
+  weather: RouteWeatherPoint[] | null;
+  nearbyCheckpoints: RouteCheckpoint[];
+  warnings: RouteConditionWarning[];
+  weatherAvailable: boolean;
+  generatedAt: string;
+}
+
+export interface AnalyticsFlow {
+  origin: string;
+  destination: string;
+  count: number;
+  totalWeight: number;
+  totalVolume: number;
+}
+
+export interface AnalyticsFlows {
+  flows: AnalyticsFlow[];
+  totalOrders: number;
+  totalWeight: number;
+  totalVolume: number;
+  periodDays: number | null;
+  generatedAt: string;
+}
+
+export interface AnalyticsRegionalSummary {
+  totalOrders: number;
+  deliveredOrders: number;
+  activeTrips: number;
+  activeVehicles: number;
+  totalTelemetryReadings: number;
+  totalKm: number;
+  generatedAt: string;
+}
+
+export interface AnalyticsEconomic {
+  totalKm: number;
+  emptyKmBaseline: number;
+  emptyKmOptimized: number;
+  savedEmptyKm: number;
+  totalFuelLiters: number;
+  savedFuelLiters: number;
+  fuelPriceTengePerLiter: number;
+  savedMoneyTenge: number;
+  savedHours: number;
+  assumptions: {
+    baselineEmptyRatio: number;
+    optimizedEmptyRatio: number;
+    fuelLitersPerKm: number;
+    fuelPriceTengePerLiter: number;
+    avgSpeedKmh: number;
+    note: string;
+  };
+  generatedAt: string;
+}
+
+export interface CalculatedRoute {
+  id: string;
+  distanceKm: number;
+  durationMinutes: number;
+  geometry: RouteGeometry;
+}
+
+export interface OrderCreationResponse {
+  order: Order;
+  route: CalculatedRoute | null;
+  routeCalculated: boolean;
+}
+
+export interface OrderAssignmentResponse {
+  order: Order;
+  capacityTons: number;
+  freeCapacityTons: number;
+}
+
+export interface CarrierRoutePlanOrder {
+  id: string;
+  title: string;
+  origin: string;
+  destination: string;
+  weight: number;
+  volume: number;
+}
+
+export interface CarrierRoutePlanStop {
+  orderId: string;
+  action: "pickup" | "delivery";
+  lat: number;
+  lng: number;
+}
+
+export interface CarrierRoutePlanVehicle {
+  id: string;
+  plateNumber: string;
+  capacityTons: number;
+}
+
+export interface CarrierRoutePlan {
+  orders: CarrierRoutePlanOrder[];
+  vehicle: CarrierRoutePlanVehicle | null;
+  capacityTons: number;
+  freeTons: number;
+  route: {
+    distanceKm: number;
+    durationMinutes: number;
+    geometry: RouteGeometry;
+  } | null;
+  stops: CarrierRoutePlanStop[];
+  sequence: string[];
+  strategy: "vroom" | "greedy" | "none";
 }

@@ -105,10 +105,35 @@ export function TopBar() {
               <Link to="/admin">{t("nav.admin")}</Link>
             </Button>
           )}
+          {user?.role === "CARRIER" && (
+            <Button
+              asChild
+              variant="ghost"
+              size="sm"
+              className={cn(
+                "hidden sm:inline-flex gap-1.5",
+                isActive("/plan") && "bg-primary/15 text-primary shadow-sm ring-1 ring-primary/20",
+              )}
+            >
+              <Link to="/plan">{t("nav.plan")}</Link>
+            </Button>
+          )}
         </nav>
       )}
 
       <div className="ml-auto flex items-center gap-1">
+        <Button
+          asChild
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "hidden sm:inline-flex gap-1.5",
+            isActive("/settlements") &&
+              "bg-primary/15 text-primary shadow-sm ring-1 ring-primary/20",
+          )}
+        >
+          <Link to="/settlements">{t("nav.settlements")}</Link>
+        </Button>
         {isAuthenticated && (
           <>
             <Button

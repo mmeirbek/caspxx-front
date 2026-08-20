@@ -144,6 +144,12 @@ function OrderDetailPage() {
               .join(", ")}
           />
           {order.comment && <InfoRow label={t("orders.fields.comment")} value={order.comment} />}
+          {order.isReefer && (
+            <InfoRow
+              label={t("orders.fields.isReefer")}
+              value={`${order.tempMin ?? "—"}°C … ${order.tempMax ?? "—"}°C`}
+            />
+          )}
           {order.estimatedPrice != null && (
             <InfoRow
               label={t("orders.fields.estimatedPrice")}
@@ -197,6 +203,20 @@ function OrderDetailPage() {
           </CardContent>
         </Card>
       )}
+
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("orders.routeConditions")}</CardTitle>
+          <CardDescription>{t("orders.routeConditionsHint")}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button asChild variant="outline">
+            <Link to="/route-conditions/$orderId" params={{ orderId }}>
+              {t("orders.viewRouteConditions")}
+            </Link>
+          </Button>
+        </CardContent>
+      </Card>
 
       {isSuperadmin && (
         <p className="text-sm text-muted-foreground">{t("superadmin.adminOnlyHint")}</p>
